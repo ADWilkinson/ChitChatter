@@ -1,10 +1,14 @@
-package co.uk.chitchatter
+package io.chitchatter
 
-import io.ktor.http.cio.websocket.*
-import kotlinx.coroutines.channels.*
+import io.ktor.http.cio.websocket.CloseReason
+import io.ktor.http.cio.websocket.Frame
+import io.ktor.http.cio.websocket.WebSocketSession
+import io.ktor.http.cio.websocket.close
+import kotlinx.coroutines.channels.ClosedSendChannelException
 import java.util.*
-import java.util.concurrent.*
-import java.util.concurrent.atomic.*
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.CopyOnWriteArrayList
+import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * Class in charge of the logic of the chat server.

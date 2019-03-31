@@ -1,17 +1,27 @@
-import co.uk.chitchatter.ChatServer
-import io.ktor.application.*
-import io.ktor.features.*
-import io.ktor.http.cio.websocket.*
+package io.chitchatter
+
+import io.ktor.application.Application
+import io.ktor.application.ApplicationCallPipeline
+import io.ktor.application.call
+import io.ktor.application.install
+import io.ktor.features.CallLogging
+import io.ktor.features.DefaultHeaders
 import io.ktor.http.cio.websocket.CloseReason
 import io.ktor.http.cio.websocket.Frame
-import io.ktor.http.content.*
-import io.ktor.routing.*
+import io.ktor.http.cio.websocket.close
+import io.ktor.http.cio.websocket.readText
+import io.ktor.http.content.defaultResource
+import io.ktor.http.content.resources
+import io.ktor.http.content.static
+import io.ktor.routing.routing
 import io.ktor.sessions.*
-import io.ktor.util.*
-import io.ktor.websocket.*
+import io.ktor.util.KtorExperimentalAPI
+import io.ktor.util.generateNonce
+import io.ktor.websocket.WebSockets
+import io.ktor.websocket.webSocket
 import kotlinx.coroutines.ObsoleteCoroutinesApi
-import kotlinx.coroutines.channels.*
-import java.time.*
+import kotlinx.coroutines.channels.consumeEach
+import java.time.Duration
 
 /**
  * Entry Point of the application. This function is referenced in the

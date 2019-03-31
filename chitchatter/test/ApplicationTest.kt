@@ -1,3 +1,4 @@
+import io.chitchatter.main
 import io.ktor.application.*
 import io.ktor.http.cio.websocket.*
 import io.ktor.server.testing.*
