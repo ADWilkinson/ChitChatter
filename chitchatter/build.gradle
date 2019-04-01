@@ -15,7 +15,7 @@ apply plugin: 'kotlinx-serialization'
 
 group 'chitchatter'
 version '0.0.1-SNAPSHOT'
-mainClassName = "io.ktor.server.netty.EngineMain"
+mainClassName = "io.ktor.server.netty.DevelopmentEngine"
 
 sourceSets {
     main.kotlin.srcDirs = main.java.srcDirs = ['src']
