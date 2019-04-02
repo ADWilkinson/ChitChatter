@@ -21,7 +21,8 @@ class ChatServer {
         list.add(socketInfo)
 
         if (list.size == 1) {
-            broadcast("server", "Member joined: $name.")
+            val response = ChatApplication.MessageInfo("Server", "Member joined: $name.")
+            broadcast(response)
         }
 
         val messages = synchronized(lastMessages) { lastMessages.toList() }
@@ -32,9 +33,10 @@ class ChatServer {
         }
     }
 
-    suspend fun memberRenamed(member: String, to: String) {
-        val oldName = memberNames.put(member, to) ?: member
-        broadcast("server", "Member renamed from $oldName to $to")
+    suspend fun memberRenamed(member: ChatApplication.Member, to: String) {
+        val oldName = memberNames.put(member.id, to) ?: member.id
+        val response = ChatApplication.MessageInfo("Server", "Member renamed from $oldName to $to")
+        broadcast(response)
     }
 
     suspend fun memberLeft(member: ChatApplication.Member, socketInfo: ChatApplication.SocketInfo) {
@@ -48,34 +50,32 @@ class ChatServer {
         }
     }
 
-    suspend fun who(sender: String) {
-        val member = members[sender]
+    suspend fun who(message: ChatApplication.MessageInfo) {
+        val member = members[message.sender]
         val memberList = memberNames.values.joinToString(prefix = "[server::who] ")
-
-        member?.send(sender, memberList)
+        message.message = memberList
+        member?.send(message)
     }
 
-    suspend fun help(sender: String) {
-        val helpStr = "[server::help] Possible commands are: /user, /help and /who"
-        val member = members[sender]
-
-        member?.send(sender, helpStr)
+    suspend fun help(message: ChatApplication.MessageInfo) {
+        message.message = "[server::help] Possible commands are: /user, /help and /who"
+        val member = members[message.sender]
+        member?.send(message)
     }
 
-    suspend fun sendTo(recipient: String, sender: String, message: String) {
-        val recipientSockets = members[recipient]
-
-        recipientSockets?.send(sender, message, recipient)
+    suspend fun sendTo(message: ChatApplication.MessageInfo) {
+        val recipientSockets = members[message.recipient]
+        recipientSockets?.send(message)
     }
 
-    suspend fun message(sender: String, message: String, channel: Channels) {
+    suspend fun message(message: ChatApplication.MessageInfo) {
+        val name = memberNames[message.sender] ?: message.sender
+        message.sender = name;
 
-        val name = memberNames[sender] ?: sender
-        val response = ChatApplication.MessageInfo(name, message, channel)
-        broadcast(response)
+        broadcast(message)
 
         synchronized(lastMessages) {
-            lastMessages.add(response)
+            lastMessages.add(message)
             if (lastMessages.size > 100) {
                 lastMessages.removeFirst()
             }
@@ -84,15 +84,13 @@ class ChatServer {
 
     private suspend fun broadcast(message: ChatApplication.MessageInfo) {
         members.values.forEach { socket ->
-            socket.send(message.sender, message.message)
+            socket.send(message)
         }
     }
 
-    private suspend fun List<ChatApplication.SocketInfo>.send(sender: String, message: String, recipient: String = "") {
+    private suspend fun List<ChatApplication.SocketInfo>.send(message: ChatApplication.MessageInfo) {
         forEach {
-
-            val response = ChatApplication.MessageInfo(sender, message, it.channel, recipient)
-            val jsonStr = mapper.writeValueAsString(response)
+            val jsonStr = mapper.writeValueAsString(message)
             try {
                 it.socket.send(jsonStr)
             } catch (t: Throwable) {

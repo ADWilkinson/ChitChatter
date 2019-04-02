@@ -44,8 +44,9 @@ fun Routing.chatSocket(server: ChatServer) {
             close(CloseReason(CloseReason.Codes.VIOLATED_POLICY, "No session exists."))
             return@webSocket
         }
+
         val member = ChatApplication.Member(session.id)
-        var socketInfo = ChatApplication.SocketInfo(this, channel)
+        val socketInfo = ChatApplication.SocketInfo(this, channel)
 
         server.memberJoin(member, socketInfo)
 
