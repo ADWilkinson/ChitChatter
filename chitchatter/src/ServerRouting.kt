@@ -10,12 +10,10 @@ import io.ktor.http.content.defaultResource
 import io.ktor.http.content.resources
 import io.ktor.http.content.static
 import io.ktor.response.respond
-import io.ktor.response.respondText
 import io.ktor.routing.Routing
 import io.ktor.routing.get
 import io.ktor.sessions.get
 import io.ktor.sessions.sessions
-import io.ktor.sessions.set
 import io.ktor.websocket.webSocket
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.channels.consumeEach
@@ -46,20 +44,20 @@ fun Routing.chatSocket(server: ChatServer) {
             close(CloseReason(CloseReason.Codes.VIOLATED_POLICY, "No session exists."))
             return@webSocket
         }
+        val member = ChatApplication.Member(session.id)
+        var socketInfo = ChatApplication.SocketInfo(this, channel)
 
-        //call.sessions.set(session.copy(id = session.id, channel = channel))
-
-        server.memberJoin(session.id, this)
+        server.memberJoin(member, socketInfo)
 
         try {
             incoming.consumeEach { frame ->
                 // Frames can be [Text], [Binary], [Ping], [Pong], [Close].
                 if (frame is Frame.Text) {
-                    messageHandler(session.id, frame.readText(), server)
+                    messageHandler(member, frame.readText(), server, channel)
                 }
             }
         } finally {
-            server.memberLeft(session.id, this)
+            server.memberLeft(member, socketInfo)
         }
     }
 }

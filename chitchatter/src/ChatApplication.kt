@@ -9,9 +9,8 @@ import io.ktor.features.ContentNegotiation
 import io.ktor.features.DefaultHeaders
 import io.ktor.features.StatusPages
 import io.ktor.http.HttpStatusCode
-import io.ktor.http.content.defaultResource
-import io.ktor.http.content.resources
-import io.ktor.http.content.static
+import io.ktor.http.cio.websocket.Frame
+import io.ktor.http.cio.websocket.WebSocketSession
 import io.ktor.jackson.jackson
 import io.ktor.response.respond
 import io.ktor.routing.routing
@@ -91,7 +90,9 @@ class ChatApplication {
         }
     }
 
-    //data class ChatSession(val id: String, var channel: Channels = Channels.Global)
     data class ChatSession(val id: String)
-    data class Message(val id: String, val message: String, val channel: Channels)
+    data class SocketInfo(val socket: WebSocketSession, val channel: Channels )
+    data class Member(val id: String)
+    data class MessageInfo(val sender: String, val message: String, val channel: Channels, val recipient: String = "")
+
 }

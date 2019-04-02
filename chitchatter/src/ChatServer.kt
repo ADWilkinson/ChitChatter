@@ -1,9 +1,7 @@
 package io.chitchatter
 
-import io.ktor.http.cio.websocket.CloseReason
-import io.ktor.http.cio.websocket.Frame
-import io.ktor.http.cio.websocket.WebSocketSession
-import io.ktor.http.cio.websocket.close
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import io.ktor.http.cio.websocket.*
 import kotlinx.coroutines.channels.ClosedSendChannelException
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
@@ -13,21 +11,24 @@ import java.util.concurrent.atomic.AtomicInteger
 class ChatServer {
     private val usersCounter = AtomicInteger()
     private val memberNames = ConcurrentHashMap<String, String>()
-    private val members = ConcurrentHashMap<String, MutableList<WebSocketSession>>()
-    private val lastMessages = LinkedList<String>()
+    private val members = ConcurrentHashMap<String, MutableList<ChatApplication.SocketInfo>>()
+    private val lastMessages = LinkedList<ChatApplication.MessageInfo>()
+    private val mapper = jacksonObjectMapper()
 
-    suspend fun memberJoin(member: String, socket: WebSocketSession) {
-        val name = memberNames.computeIfAbsent(member) { "user${usersCounter.incrementAndGet()}" }
-        val list = members.computeIfAbsent(member) { CopyOnWriteArrayList<WebSocketSession>() }
-        list.add(socket)
+    suspend fun memberJoin(member: ChatApplication.Member, socketInfo: ChatApplication.SocketInfo) {
+        val name = memberNames.computeIfAbsent(member.id) { "user${usersCounter.incrementAndGet()}" }
+        val list = members.computeIfAbsent(member.id) { CopyOnWriteArrayList<ChatApplication.SocketInfo>() }
+        list.add(socketInfo)
 
         if (list.size == 1) {
             broadcast("server", "Member joined: $name.")
         }
 
         val messages = synchronized(lastMessages) { lastMessages.toList() }
-        for (message in messages) {
-            socket.send(Frame.Text(message))
+        for (messageInfo in messages) {
+            val response = ChatApplication.MessageInfo(member.id, messageInfo.message, socketInfo.channel)
+            val jsonStr = mapper.writeValueAsString(response)
+            socketInfo.socket.send(jsonStr)
         }
     }
 
@@ -36,62 +37,67 @@ class ChatServer {
         broadcast("server", "Member renamed from $oldName to $to")
     }
 
-    suspend fun memberLeft(member: String, socket: WebSocketSession) {
-
-        val connections = members[member]
-        connections?.remove(socket)
+    suspend fun memberLeft(member: ChatApplication.Member, socketInfo: ChatApplication.SocketInfo) {
+        val connections = members[member.id]
+        connections?.remove(socketInfo)
 
         if (connections != null && connections.isEmpty()) {
-            val name = memberNames.remove(member) ?: member
-            broadcast("server", "Member left: $name.")
+            val name = memberNames.remove(member.id) ?: member.id
+            val response = ChatApplication.MessageInfo("Server", "Member left: $name.", )
+            broadcast("server", )
         }
     }
 
     suspend fun who(sender: String) {
-        members[sender]?.send(Frame.Text(memberNames.values.joinToString(prefix = "[server::who] ")))
+        val member = members[sender]
+        val memberList = memberNames.values.joinToString(prefix = "[server::who] ")
+
+        member?.send(sender, memberList)
     }
 
     suspend fun help(sender: String) {
-        members[sender]?.send(Frame.Text("[server::help] Possible commands are: /user, /help and /who"))
+        val helpStr = "[server::help] Possible commands are: /user, /help and /who"
+        val member = members[sender]
+
+        member?.send(sender, helpStr)
     }
 
     suspend fun sendTo(recipient: String, sender: String, message: String) {
-        members[recipient]?.send(Frame.Text("[$sender] $message"))
+        val recipientSockets = members[recipient]
+
+        recipientSockets?.send(sender, message, recipient)
     }
 
-    suspend fun message(sender: String, message: String) {
+    suspend fun message(sender: String, message: String, channel: Channels) {
 
         val name = memberNames[sender] ?: sender
-        val formatted = "[$name] $message"
-
-        broadcast(formatted)
+        val response = ChatApplication.MessageInfo(name, message, channel)
+        broadcast(response)
 
         synchronized(lastMessages) {
-            lastMessages.add(formatted)
+            lastMessages.add(response)
             if (lastMessages.size > 100) {
                 lastMessages.removeFirst()
             }
         }
     }
 
-    private suspend fun broadcast(message: String) {
+    private suspend fun broadcast(message: ChatApplication.MessageInfo) {
         members.values.forEach { socket ->
-            socket.send(Frame.Text(message))
+            socket.send(message.sender, message.message)
         }
     }
 
-    private suspend fun broadcast(sender: String, message: String) {
-        val name = memberNames[sender] ?: sender
-        broadcast("[$name] $message")
-    }
-
-    private suspend fun List<WebSocketSession>.send(frame: Frame) {
+    private suspend fun List<ChatApplication.SocketInfo>.send(sender: String, message: String, recipient: String = "") {
         forEach {
+
+            val response = ChatApplication.MessageInfo(sender, message, it.channel, recipient)
+            val jsonStr = mapper.writeValueAsString(response)
             try {
-                it.send(frame.copy())
+                it.socket.send(jsonStr)
             } catch (t: Throwable) {
                 try {
-                    it.close(CloseReason(CloseReason.Codes.PROTOCOL_ERROR, ""))
+                    it.socket.close(CloseReason(CloseReason.Codes.PROTOCOL_ERROR, ""))
                 } catch (ignore: ClosedSendChannelException) {
                     // at some point it will get closed
                 }
