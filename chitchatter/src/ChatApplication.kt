@@ -1,13 +1,18 @@
 package io.chitchatter
 
+import com.fasterxml.jackson.core.util.DefaultIndenter
+import com.fasterxml.jackson.core.util.DefaultPrettyPrinter
+import com.fasterxml.jackson.databind.SerializationFeature
 import io.ktor.application.*
 import io.ktor.features.CallLogging
+import io.ktor.features.ContentNegotiation
 import io.ktor.features.DefaultHeaders
 import io.ktor.features.StatusPages
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.defaultResource
 import io.ktor.http.content.resources
 import io.ktor.http.content.static
+import io.ktor.jackson.jackson
 import io.ktor.response.respond
 import io.ktor.routing.routing
 import io.ktor.server.engine.applicationEngineEnvironment
@@ -55,22 +60,30 @@ class ChatApplication {
         }
 
         install(Sessions) {
-            cookie<ChatSession>("CHITCHATTER_SESSION")
+            cookie<ChatSession>("SESSION")
         }
 
-        install(StatusPages){
+        install(StatusPages) {
             exception<Throwable> { cause ->
                 call.respond(HttpStatusCode.InternalServerError)
                 log.debug(cause.toString())
             }
         }
 
+        install(ContentNegotiation) {
+            jackson {
+                configure(SerializationFeature.INDENT_OUTPUT, true)
+                setDefaultPrettyPrinter(DefaultPrettyPrinter().apply {
+                    indentArraysWith(DefaultPrettyPrinter.FixedSpaceIndenter.instance)
+                    indentObjectsWith(DefaultIndenter("  ", "\n"))
+                })
+            }
+        }
         intercept(ApplicationCallPipeline.Features) {
             if (call.sessions.get<ChatSession>() == null) {
                 call.sessions.set(ChatSession(generateNonce()))
             }
         }
-
         routing {
             root()
             status()
@@ -78,5 +91,7 @@ class ChatApplication {
         }
     }
 
+    //data class ChatSession(val id: String, var channel: Channels = Channels.Global)
     data class ChatSession(val id: String)
+    data class Message(val id: String, val message: String, val channel: Channels)
 }

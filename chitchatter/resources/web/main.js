@@ -9,7 +9,7 @@ function connect() {
     // The socket will be connected automatically asap. Not now but after returning to the event loop,
     // so we can register handlers safely before the connection is performed.
     console.log("Begin connect");
-    socket = new WebSocket("ws://" + window.location.host + "/ws");
+    socket = new WebSocket("ws://" + window.location.host + "/ws/Global");
 
     // We set a handler that will be executed if the socket has any kind of unexpected error.
     // Since this is a just sample, we only report it at the console instead of making more complex things.
@@ -43,6 +43,8 @@ function connect() {
 
     // If we receive a message from the server, we want to handle it.
     socket.onmessage = function(event) {
+        console.log(event);
+        console.log(event.data);
         received(event.data.toString());
     };
 }
