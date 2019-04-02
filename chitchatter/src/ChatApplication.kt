@@ -91,8 +91,13 @@ class ChatApplication {
     }
 
     data class ChatSession(val id: String)
-    data class SocketInfo(val socket: WebSocketSession, val channel: Channels )
+    data class SocketInfo(val socket: WebSocketSession, val channel: Channels)
     data class Member(val id: String)
-    data class MessageInfo(var sender: String, var message: String = "", val channel: Channels = Channels.Global, val recipient: String = "")
+    data class MessageInfo(
+        var sender: String,
+        var message: String = "",
+        val channel: Channels = Channels.Global,
+        val recipient: String = ""
+    )
 
 }

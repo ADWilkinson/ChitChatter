@@ -27,7 +27,7 @@ class ChatServer {
 
         val messages = synchronized(lastMessages) { lastMessages.toList() }
         for (messageInfo in messages) {
-            val response = ChatApplication.MessageInfo(member.id, messageInfo.message, socketInfo.channel)
+            val response = ChatApplication.MessageInfo(memberNames[messageInfo.sender]!!, messageInfo.message, socketInfo.channel)
             val jsonStr = mapper.writeValueAsString(response)
             socketInfo.socket.send(jsonStr)
         }
@@ -51,16 +51,21 @@ class ChatServer {
     }
 
     suspend fun who(message: ChatApplication.MessageInfo) {
-        val member = members[message.sender]
-        val memberList = memberNames.values.joinToString(prefix = "[server::who] ")
-        message.message = memberList
-        member?.send(message)
+        val res = message.copy(
+            sender = "Server",
+            message = memberNames.values.joinToString(prefix = "[server::who] "),
+            recipient = message.sender
+        )
+        sendTo(res)
     }
 
     suspend fun help(message: ChatApplication.MessageInfo) {
-        message.message = "[server::help] Possible commands are: /user, /help and /who"
-        val member = members[message.sender]
-        member?.send(message)
+        val res = message.copy(
+            sender = "Server",
+            message = "[server::help] Possible commands are: /user, /help and /who",
+            recipient = message.sender
+        )
+        sendTo(res)
     }
 
     suspend fun sendTo(message: ChatApplication.MessageInfo) {
@@ -83,19 +88,19 @@ class ChatServer {
     }
 
     private suspend fun broadcast(message: ChatApplication.MessageInfo) {
-        members.values.forEach { socket ->
+        for (socket in members.values) {
             socket.send(message)
         }
     }
 
     private suspend fun List<ChatApplication.SocketInfo>.send(message: ChatApplication.MessageInfo) {
-        forEach {
+        for (socketInfo in this) {
             val jsonStr = mapper.writeValueAsString(message)
             try {
-                it.socket.send(jsonStr)
+                socketInfo.socket.send(jsonStr)
             } catch (t: Throwable) {
                 try {
-                    it.socket.close(CloseReason(CloseReason.Codes.PROTOCOL_ERROR, ""))
+                    socketInfo.socket.close(CloseReason(CloseReason.Codes.PROTOCOL_ERROR, ""))
                 } catch (ignore: ClosedSendChannelException) {
                     // at some point it will get closed
                 }
