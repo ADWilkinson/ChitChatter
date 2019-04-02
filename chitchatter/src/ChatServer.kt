@@ -43,8 +43,8 @@ class ChatServer {
 
         if (connections != null && connections.isEmpty()) {
             val name = memberNames.remove(member.id) ?: member.id
-            val response = ChatApplication.MessageInfo("Server", "Member left: $name.", )
-            broadcast("server", )
+            val response = ChatApplication.MessageInfo("Server", "Member left: $name.")
+            broadcast(response)
         }
     }
 
