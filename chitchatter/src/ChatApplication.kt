@@ -14,6 +14,10 @@ import io.ktor.http.content.defaultResource
 import io.ktor.http.content.resources
 import io.ktor.http.content.static
 import io.ktor.routing.routing
+import io.ktor.server.engine.applicationEngineEnvironment
+import io.ktor.server.engine.connector
+import io.ktor.server.engine.embeddedServer
+import io.ktor.server.netty.Netty
 import io.ktor.sessions.*
 import io.ktor.util.KtorExperimentalAPI
 import io.ktor.util.generateNonce
@@ -35,8 +39,18 @@ import java.time.Duration
  */
 @KtorExperimentalAPI
 @ObsoleteCoroutinesApi
-fun Application.main() {
-    ChatApplication().apply { main() }
+fun main() {
+    val env = applicationEngineEnvironment {
+        module {
+            ChatApplication().apply { main() }
+        }
+
+        connector {
+            port = 8080
+            host = "127.0.0.1"
+        }
+    }
+    embeddedServer(Netty, env).start(true)
 }
 
 /**
