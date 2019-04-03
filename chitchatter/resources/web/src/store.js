@@ -10,7 +10,10 @@ const initialState = {
   channel: CHANNEL_GLOBAL,
   channelIndex: 0,
   users: [],
-  messages: []
+  messages: [],
+  socketInfo: {
+    currentSocket: new WebSocket('ws://' + window.location.host + '/ws/Global')
+  }
 };
 
 const mainReducer = (state, action) => {

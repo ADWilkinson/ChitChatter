@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState, useContext} from "react";
 import { Grid, CardContent, withStyles, TextField, Divider, Button } from "@material-ui/core";
 import SendIcon from "@material-ui/icons/Send";
+import { Store } from "../store";
 
 const styles = theme => ({
   messages: {
@@ -16,6 +17,11 @@ const styles = theme => ({
 
 const MessageContainer = props => {
   const { classes } = props;
+  const { state, dispatch } = useContext(Store);
+  
+  const sendMessage = () => {
+    state.channel.socketInfo.currentSocket.send('HELLO FROM THE APP')
+  }
 
   return (
     <React.Fragment>
@@ -38,7 +44,7 @@ const MessageContainer = props => {
         </Grid>
 
         <Grid item xs={6} container justify="center">
-          <Button variant="text" disabled={false} onClick={() => {}}>
+          <Button variant="text" disabled={false} onClick={sendMessage}>
             Send
             <SendIcon
               style={{
