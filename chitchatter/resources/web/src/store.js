@@ -1,11 +1,12 @@
 import React, { useReducer } from 'react';
-import { navigationReducer } from './reducers/navigationReducer';
+import { channelReducer } from './reducers/channelReducers';
 import { usersReducer } from './reducers/usersReducer';
+import { CHANNEL_GLOBAL } from './constants/channels';
 
 export const Store = React.createContext();
 
 const initialState = {
-  location: '',
+  channel: CHANNEL_GLOBAL,
   users: []
 };
 
@@ -15,7 +16,7 @@ const mainReducer = (state, action) => {
    */
 
   return {
-    location: navigationReducer(state, action),
+    channel: channelReducer(state, action),
     users: usersReducer(state, action)
   };
 };

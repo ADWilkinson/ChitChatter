@@ -4,8 +4,6 @@ import { withStyles } from '@material-ui/core/styles';
 import Link from '@material-ui/core/Link';
 import MuiAppBar from '@material-ui/core/AppBar';
 import MuiToolbar from '@material-ui/core/Toolbar';
-import { Store } from '../store';
-import { SET_LOCATION } from '../constants/navigationActions';
 
 const styles = theme => ({
   topLayer: {
