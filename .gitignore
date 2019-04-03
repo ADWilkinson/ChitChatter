@@ -76,3 +76,4 @@ typings/
 .fusebox/
 chitchatter/local.properties
 .idea/
+.idea/workspace.xml
