@@ -1,10 +1,10 @@
 import React from 'react';
-import ProductHero from '../components/ProductHero';
+import ChatContainer from '../components/ChatContainer'
 
 const HomePage = () => {
   return (
     <React.Fragment>
-      <ProductHero />
+      <ChatContainer></ChatContainer>
     </React.Fragment>
   );
 };

@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8c40941d-546d-4a8c-aa8a-de0412127288" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chitchatter/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/chitchatter/gradle.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chitchatter/src/ServerRouting.kt" beforeDir="false" afterPath="$PROJECT_DIR$/chitchatter/src/ServerRouting.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chitchatter/resources/web/src/components/ProductHero.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chitchatter/resources/web/src/pages/HomePage.js" beforeDir="false" afterPath="$PROJECT_DIR$/chitchatter/resources/web/src/pages/HomePage.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -119,13 +118,6 @@
               <item name="ChitterChat" type="462c0819:PsiDirectoryNode" />
               <item name="chitchatter" type="462c0819:PsiDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ChitterChat" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ChitterChat" type="462c0819:PsiDirectoryNode" />
-              <item name="chitchatter" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="web" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />

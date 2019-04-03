@@ -8,6 +8,9 @@ import { Store } from '../store';
 import { SET_LOCATION } from '../constants/navigationActions';
 
 const styles = theme => ({
+  topLayer: {
+    zIndex: theme.zIndex.drawer + 1
+  },
   title: {
     fontSize: 24
   },
@@ -53,8 +56,8 @@ const Navbar = props => {
   */
 
   return (
-    <MuiAppBar position="static">
-      <MuiToolbar className={classes.toolbar}>
+    <MuiAppBar position="static" className={classes.topLayer}>
+      <MuiToolbar className={classNames(classes.toolbar, classes.topLayer)}>
         <div className={classes.left} />
         <Link variant="h6" underline="none" color="inherit" className={classes.title} href="/">
           ChitChatter
