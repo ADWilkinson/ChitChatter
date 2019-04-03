@@ -1,10 +1,12 @@
-import React from 'react';
-import ChatContainer from '../components/ChatContainer'
+import React from "react";
+import ChatContainer from "../components/ChatContainer";
+import ParticipantsContainer from "../components/ParticipantsContainer";
 
 const HomePage = () => {
   return (
     <React.Fragment>
-      <ChatContainer></ChatContainer>
+      <ParticipantsContainer />
+      <ChatContainer />
     </React.Fragment>
   );
 };
