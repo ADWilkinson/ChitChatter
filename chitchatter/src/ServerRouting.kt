@@ -20,8 +20,8 @@ import kotlinx.coroutines.channels.consumeEach
 
 fun Routing.root() {
     static {
-        defaultResource("index.html", "web")
-        resources("web")
+        defaultResource("index.html", "web/build")
+        resources("web/build")
     }
 }
 
