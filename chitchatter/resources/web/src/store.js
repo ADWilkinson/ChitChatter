@@ -2,6 +2,7 @@ import React, { useReducer } from 'react';
 import { channelReducer } from './reducers/channelReducers';
 import { usersReducer } from './reducers/usersReducer';
 import { CHANNEL_GLOBAL } from './constants/channels';
+import { messagesReducer } from './reducers/messagesReducer';
 
 export const Store = React.createContext();
 
