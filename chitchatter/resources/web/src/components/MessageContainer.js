@@ -21,6 +21,7 @@ const MessageContainer = props => {
     <React.Fragment>
       <CardContent className={classes.messages}>{/* Render Messages*/}</CardContent>
       <Divider />
+
       <Grid container wrap="nowrap" justify="center" style={{ marginTop: 12 }}>
         <Grid item xs={10} container justifty="center">
           <TextField
@@ -35,6 +36,7 @@ const MessageContainer = props => {
             }}
           />
         </Grid>
+
         <Grid item xs={6} container justify="center">
           <Button variant="text" disabled={false} onClick={() => {}}>
             Send

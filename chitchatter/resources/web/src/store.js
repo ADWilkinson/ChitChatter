@@ -8,7 +8,8 @@ export const Store = React.createContext();
 const initialState = {
   channel: CHANNEL_GLOBAL,
   channelIndex: 0,
-  users: []
+  users: [],
+  messages: []
 };
 
 const mainReducer = (state, action) => {
@@ -18,7 +19,8 @@ const mainReducer = (state, action) => {
 
   return {
     channel: channelReducer(state, action),
-    users: usersReducer(state, action)
+    users: usersReducer(state, action),
+    messages: messagesReducer(state, action)
   };
 };
 
