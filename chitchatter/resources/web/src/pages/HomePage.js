@@ -7,10 +7,10 @@ const HomePage = () => {
   const { state } = useContext(Store);
 
   useEffect(() => {
-    const socket = new WebSocket("ws://" + window.location.host + "/ws/" + state.channel);
+    const socket = new WebSocket("ws://" + window.location.host + "/ws/" + state.channel.channel);
 
     socket.onopen = () => {
-      console.log("Succesfully connected to chat server at ws://localhost:8080/ws/" + state.channel);
+      console.log("Succesfully connected to chat server at ws://localhost:8080/ws/" + state.channel.channel);
     };
 
     socket.onclose = () => {
