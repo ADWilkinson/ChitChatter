@@ -6,7 +6,7 @@ export const messagesReducer = (state, action) => {
     case SET_MESSAGES_LIST:
       return { ...state, messages: action.payload };
     case ADD_MESSAGE_TO_LIST:
-      return { ...state.messages, messages: Object.create({}, ...state.messages, action.payload)};
+      return { ...state, messages: Object.create({}, ...state.messages, action.payload)};
     default:
       return state;
   }
