@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import MessageContainer from "./MessageContainer";
 import { Grid, Card, Tab, Tabs, AppBar, withStyles } from "@material-ui/core";
 import classNames from "classnames";
+import { Store } from "../store";
+import { SET_CHANNEL } from "../constants/channelActions";
+import { CHANNEL_GLOBAL, CHANNEL_UK } from "../constants/channels";
 
 const styles = theme => ({
   root: {
@@ -20,6 +23,18 @@ const styles = theme => ({
 
 const ChatContainer = props => {
   const { classes } = props;
+  const { dispatch } = useContext(Store);
+  const [index, setIndex] = useState(0);
+
+  const changeChannel = (event, value) => {
+    setIndex(value);
+    const channelSelected = value === 0 ? { name: CHANNEL_GLOBAL, index: 0 } : { name: CHANNEL_UK, index: 1 };
+
+    dispatch({
+      type: SET_CHANNEL,
+      payload: channelSelected
+    });
+  };
 
   return (
     <React.Fragment>
@@ -27,10 +42,9 @@ const ChatContainer = props => {
         <Grid container justify="center">
           <Card className={classes.card}>
             <AppBar position="static" color="default">
-              <Tabs value={""} onChange={() => {}} indicatorColor="primary" textColor="primary" variant="fullWidth">
-                <Tab label="Item One" />
-                <Tab label="Item Two" />
-                <Tab label="Item Three" />
+              <Tabs value={index} onChange={changeChannel} indicatorColor="primary" textColor="primary" variant="fullWidth">
+                <Tab label="Global" />
+                <Tab label="United Kingdom" />
               </Tabs>
             </AppBar>
 

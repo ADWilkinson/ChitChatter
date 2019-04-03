@@ -3,6 +3,7 @@ import ChatContainer from "../components/ChatContainer";
 import ParticipantsContainer from "../components/ParticipantsContainer";
 
 const HomePage = () => {
+
   return (
     <React.Fragment>
       <ParticipantsContainer />

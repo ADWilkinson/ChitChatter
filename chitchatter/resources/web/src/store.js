@@ -7,6 +7,7 @@ export const Store = React.createContext();
 
 const initialState = {
   channel: CHANNEL_GLOBAL,
+  channelIndex: 0,
   users: []
 };
 

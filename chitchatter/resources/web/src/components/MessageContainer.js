@@ -1,7 +1,6 @@
 import React from "react";
-import { Grid, Card, CardContent, withStyles, TextField, Divider, Button } from "@material-ui/core";
+import { Grid, CardContent, withStyles, TextField, Divider, Button } from "@material-ui/core";
 import SendIcon from "@material-ui/icons/Send";
-
 
 const styles = theme => ({
   messages: {
