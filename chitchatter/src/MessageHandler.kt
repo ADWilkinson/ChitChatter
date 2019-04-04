@@ -18,14 +18,16 @@ suspend fun messageHandler(
                     messageInfo.copy(
                         sender = "Server",
                         message = "[server::help] /user [newName]",
-                        recipient = messageInfo.sender
+                        recipient = messageInfo.sender,
+                        type = "SERVER_MESSAGE"
                     )
                 )
                 newName.length > 50 -> server.sendTo(
                     messageInfo.copy(
                         sender = "Server",
                         message = "[server::help] new name is too long: 50 characters limit",
-                        recipient = messageInfo.sender
+                        recipient = messageInfo.sender,
+                        type = "SERVER_MESSAGE"
                     )
                 )
                 else -> server.memberRenamed(member, newName)
@@ -36,7 +38,8 @@ suspend fun messageHandler(
             messageInfo.copy(
                 sender = "Server",
                 message = "[server::help] Unknown command ${command.takeWhile { !it.isWhitespace() }}",
-                recipient = messageInfo.sender
+                recipient = messageInfo.sender,
+                type = "SERVER_MESSAGE"
             )
         )
         else -> server.message(messageInfo)

@@ -24,7 +24,8 @@ class ChatServer {
             val response = ChatApplication.MessageInfo(
                 sender = "Server",
                 message = "Member joined: $name.",
-                channel = socketInfo.channel
+                channel = socketInfo.channel,
+                type = "SERVER_MESSAGE"
             )
             broadcast(response)
         }
@@ -33,28 +34,37 @@ class ChatServer {
         val users = memberNames.values
 
         val response = ChatApplication.MessageInfo(
-                sender = "Server",
-                message = "",
-                channel = socketInfo.channel,
-                type = "UPDATE"
-            )
+            sender = "Server",
+            message = "",
+            channel = socketInfo.channel,
+            type = "SERVER_UPDATE_MESSAGES"
+        )
+
+        val usersResponse = ChatApplication.MessageInfo(
+            sender = "Server",
+            message = "",
+            channel = socketInfo.channel,
+            type = "SERVER_UPDATE_USERS"
+        )
 
         for (messageInfo in messages) {
-            response.messageHistory.add(messageInfo)
+            usersResponse.messageHistory.add(messageInfo)
         }
 
-        for(user in users){
+        for (user in users) {
             response.participants.add(ChatApplication.Member(user))
         }
 
         broadcast(response)
+        broadcast(usersResponse)
     }
 
     suspend fun memberRenamed(member: ChatApplication.Member, to: String) {
         val oldName = memberNames.put(member.id, to) ?: member.id
         val response = ChatApplication.MessageInfo(
             sender = "Server",
-            message = "Member renamed from $oldName to $to"
+            message = "Member renamed from $oldName to $to",
+            type = "SERVER_MESSAGE"
         )
         broadcast(response)
     }
@@ -68,9 +78,26 @@ class ChatServer {
             val response = ChatApplication.MessageInfo(
                 sender = "Server",
                 message = "Member left: $name.",
-                channel = socketInfo.channel
-             )
+                channel = socketInfo.channel,
+                type = "SERVER_MESSAGE"
+            )
             broadcast(response)
+
+            val users = memberNames.values
+
+            val updateRes = ChatApplication.MessageInfo(
+                sender = "Server",
+                message = "",
+                channel = socketInfo.channel,
+                type = "SERVER_UPDATE_USERS"
+            )
+
+            for (user in users) {
+                updateRes.participants.add(ChatApplication.Member(user))
+            }
+
+            broadcast(updateRes)
+
         }
     }
 
@@ -78,7 +105,8 @@ class ChatServer {
         val res = message.copy(
             sender = "Server",
             message = memberNames.values.joinToString(prefix = "[server::who] "),
-            recipient = message.sender
+            recipient = message.sender,
+            type = "SERVER_MESSAGE"
         )
         sendTo(res)
     }
@@ -87,7 +115,8 @@ class ChatServer {
         val res = message.copy(
             sender = "Server",
             message = "[server::help] Possible commands are: /user, /help and /who",
-            recipient = message.sender
+            recipient = message.sender,
+            type = "SERVER_MESSAGE"
         )
         sendTo(res)
     }

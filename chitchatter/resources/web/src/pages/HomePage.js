@@ -20,8 +20,17 @@ const HomePage = () => {
 
       socketInfo.socket.onmessage = event => {
         const data = JSON.parse(event.data);
-        if (socketInfo.name !== data.channel) return;
-        console.warn(data);
+      
+        // START ADDING THE FUNCTIONALITY TO STORE EVERYTHING FROM THE SOCKET
+        switch(data.type){
+          case 'MESSAGE':
+            //addMessageToChannel(data, dispatch)
+            break;
+          case 'UPDATE':
+            break;
+          default:
+            break;
+        }
       };
     }
   }, []);
