@@ -5,6 +5,7 @@ import classNames from "classnames";
 import { Store } from "../store";
 import { SET_CHANNEL } from "../constants/channelActions";
 import { CHANNEL_GLOBAL, CHANNEL_UK } from "../constants/channels";
+import { connect } from "../utils/socket";
 
 const styles = theme => ({
   root: {
@@ -23,7 +24,7 @@ const styles = theme => ({
 
 const ChatContainer = props => {
   const { classes } = props;
-  const { dispatch } = useContext(Store);
+  const { state, dispatch } = useContext(Store);
   const [index, setIndex] = useState(0);
 
   const changeChannel = (event, value) => {

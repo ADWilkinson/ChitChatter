@@ -21,7 +21,11 @@ class ChatServer {
         list.add(socketInfo)
 
         if (list.size == 1) {
-            val response = ChatApplication.MessageInfo("Server", "Member joined: $name.")
+            val response = ChatApplication.MessageInfo(
+                sender = "Server",
+                message = "Member joined: $name.",
+                channel = socketInfo.channel
+            )
             broadcast(response)
         }
 
