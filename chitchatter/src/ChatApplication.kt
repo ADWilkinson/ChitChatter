@@ -98,7 +98,7 @@ class ChatApplication {
         var message: String = "",
         val channel: Channels = Channels.Global,
         val recipient: String = "",
-        val messageTime: String = getCurrentFormattedTime()
+        val messageTime: String = getCurrentFormattedTime(),
         val type: String = "MESSAGE_NEW"
     )
 

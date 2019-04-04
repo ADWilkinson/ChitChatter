@@ -37,8 +37,7 @@ class ChatServer {
                 channel = socketInfo.channel,
                 type = "MESSAGE_HISTORY"
             )
-            val jsonStr = mapper.writeValueAsString(response)
-            socketInfo.socket.send(jsonStr)
+            socketInfo.socket.send(response)
         }
     }
 
@@ -57,7 +56,7 @@ class ChatServer {
             val response = ChatApplication.MessageInfo(
                 sender = "Server",
                 message = "Member left: $name.",
-                channel = socketInfo.channel,
+                channel = socketInfo.channel
              )
             broadcast(response)
         }
