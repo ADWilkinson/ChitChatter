@@ -31,7 +31,12 @@ class ChatServer {
 
         val messages = synchronized(lastMessages) { lastMessages.toList() }
         for (messageInfo in messages) {
-            val response = ChatApplication.MessageInfo(memberNames[messageInfo.sender]!!, messageInfo.message, socketInfo.channel)
+            val response = ChatApplication.MessageInfo(
+                sender = memberNames[messageInfo.sender]!!,
+                message = messageInfo.message,
+                channel = socketInfo.channel,
+                type = "MESSAGE_HISTORY"
+            )
             val jsonStr = mapper.writeValueAsString(response)
             socketInfo.socket.send(jsonStr)
         }
@@ -49,7 +54,11 @@ class ChatServer {
 
         if (connections != null && connections.isEmpty()) {
             val name = memberNames.remove(member.id) ?: member.id
-            val response = ChatApplication.MessageInfo("Server", "Member left: $name.")
+            val response = ChatApplication.MessageInfo(
+                sender = "Server",
+                message = "Member left: $name.",
+                channel = socketInfo.channel,
+             )
             broadcast(response)
         }
     }
