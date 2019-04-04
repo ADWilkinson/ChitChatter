@@ -99,7 +99,7 @@ class ChatApplication {
         val channel: Channels = Channels.Global,
         val recipient: String = "",
         val messageTime: String = getCurrentFormattedTime(),
-        val type: String = "MESSAGE_NEW"
+        val type: String = "MESSAGE_NEW",
+        var messageHistory: MutableList<MessageInfo> = mutableListOf()
     )
-
 }

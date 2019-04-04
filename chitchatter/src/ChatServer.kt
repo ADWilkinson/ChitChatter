@@ -30,15 +30,26 @@ class ChatServer {
         }
 
         val messages = synchronized(lastMessages) { lastMessages.toList() }
-        for (messageInfo in messages) {
-            val response = ChatApplication.MessageInfo(
-                sender = memberNames[messageInfo.sender]!!,
-                message = messageInfo.message,
+        val chatHistory = mutableListOf<ChatApplication.MessageInfo>()
+
+        val response = ChatApplication.MessageInfo(
+                sender = "Server",
+                message = "MESSAGE_HISTORY",
                 channel = socketInfo.channel,
-                type = "MESSAGE_HISTORY"
+                type = "MESSAGE_HISTORY",
+                messageHistory = chatHistory
             )
-            socketInfo.socket.send(response)
+
+        for (messageInfo in messages) {
+            val msg = ChatApplication.MessageInfo(
+                    sender = memberNames[messageInfo.sender]!!,
+                    message = messageInfo.message,
+                    channel = socketInfo.channel
+            )
+            response.messageHistory.add(msg)
         }
+
+        broadcast(response)
     }
 
     suspend fun memberRenamed(member: ChatApplication.Member, to: String) {
