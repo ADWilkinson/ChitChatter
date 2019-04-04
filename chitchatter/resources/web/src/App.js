@@ -5,6 +5,7 @@ import { MuiThemeProvider } from '@material-ui/core/styles';
 import theme from './theme/theme';
 import Navbar from './components/Navbar';
 import { StoreProvider } from './store';
+import { SocketsProvider} from "./utils/socket";
 
 const App = () => {
   return (
@@ -15,11 +16,13 @@ const App = () => {
         <header>
           <Navbar />
         </header>
-
-        <main>
-          <Routes />
-        </main>
-
+        
+        <SocketsProvider>
+          <main>
+            <Routes />
+          </main>
+        </SocketsProvider>
+        
         <footer />
       </StoreProvider>
     </MuiThemeProvider>

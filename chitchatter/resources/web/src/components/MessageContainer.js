@@ -2,6 +2,7 @@ import React, { useState, useContext} from "react";
 import { Grid, CardContent, withStyles, TextField, Divider, Button } from "@material-ui/core";
 import SendIcon from "@material-ui/icons/Send";
 import { Store } from "../store";
+import { Sockets } from "../utils/socket";
 
 const styles = theme => ({
   messages: {
@@ -17,13 +18,15 @@ const styles = theme => ({
 
 const MessageContainer = props => {
   const { classes } = props;
-  const { state, dispatch, sockets } = useContext(Store);
-  
+  const { state, dispatch } = useContext(Store);
+  const { sockets } = useContext(Sockets);
+
   console.warn('MESSAGECONTAINER', sockets)
 
   const sendMessage = () => {
-    console.log('CHANNEL', state.channel.channel);
-    const currSocket = sockets.find(x => x.name === state.channel.channel);
+    console.log('CHANNEL', state.channel);
+    const currSocket = sockets.find(x => x.name === state.channel);
+    console.warn(currSocket);
     currSocket.socket.send('HELLO FROM THE APP');
   }
 

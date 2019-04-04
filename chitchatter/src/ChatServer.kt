@@ -39,12 +39,7 @@ class ChatServer {
             )
 
         for (messageInfo in messages) {
-            val msg = ChatApplication.MessageInfo(
-                    sender = memberNames[messageInfo.sender]!!,
-                    message = messageInfo.message,
-                    channel = socketInfo.channel
-            )
-            response.messageHistory.add(msg)
+            response.messageHistory.add(messageInfo)
         }
 
         broadcast(response)

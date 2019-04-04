@@ -1,9 +1,9 @@
-import React, { useReducer } from 'react';
-import { channelReducer } from './reducers/channelReducers';
-import { usersReducer } from './reducers/usersReducer';
-import { CHANNEL_GLOBAL, CHANNEL_LIST } from './constants/channels';
-import { messagesReducer } from './reducers/messagesReducer';
-import { connect } from './utils/socket';
+import React, { useReducer } from "react";
+import { channelReducer } from "./reducers/channelReducer";
+import { usersReducer } from "./reducers/usersReducer";
+import { CHANNEL_GLOBAL } from "./constants/channels";
+import { messagesReducer } from "./reducers/messagesReducer";
+import { isEqual } from "lodash";
 
 export const Store = React.createContext();
 
@@ -18,18 +18,17 @@ const mainReducer = (state, action) => {
   /*
     Middleware goes here.
    */
+  let reducers = [channelReducer, usersReducer, messagesReducer];
 
-  return {
-    channel: channelReducer(state, action),
-    users: usersReducer(state, action),
-    messages: messagesReducer(state, action)
-  };
+  for (let reducer of reducers) {
+    let newState = reducer(state, action);
+    if (!isEqual(newState, state)) return newState;
+  }
 };
 
 export const StoreProvider = props => {
   const [state, dispatch] = useReducer(mainReducer, initialState);
-  const sockets = connect(dispatch, CHANNEL_LIST);
-  const value = { state, dispatch, sockets };
+  const value = { state, dispatch };
 
   return <Store.Provider value={value}>{props.children}</Store.Provider>;
 };
