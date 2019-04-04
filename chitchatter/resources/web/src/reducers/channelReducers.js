@@ -3,6 +3,8 @@ import { SET_CHANNEL, SET_CHANNEL_SOCKET, REMOVE_CHANNEL_SOCKET } from '../const
 export const channelReducer = (state, action) => {
   switch (action.type) {
     case SET_CHANNEL:
+      console.warn(state)
+      console.warn(...state)
       return { ...state, channel: action.payload.name, channelIndex: action.payload.index };
     case SET_CHANNEL_SOCKET:
       return {...state, socketInfo: {...state.socketInfo, currentSocket: action.payload.socket} }

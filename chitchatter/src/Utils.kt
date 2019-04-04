@@ -4,7 +4,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
-fun getCurrentFormattedTime(){
+fun getCurrentFormattedTime() : String {
     val current = LocalDateTime.now()
 
     val formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)

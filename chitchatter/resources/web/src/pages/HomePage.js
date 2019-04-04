@@ -6,48 +6,45 @@ import { SET_CHANNEL_SOCKET, REMOVE_CHANNEL_SOCKET } from "../constants/channelA
 
 const HomePage = () => {
   const { state, dispatch } = useContext(Store);
+
+  const connect = () => {
+    
+    console.log(state.channel);
+    // DEV
+    const socket = new WebSocket("ws://" + "localhost:8080" + "/ws/" + state.channel);
+    // PROD
+    //const socket = new WebSocket("ws://" + window.location.host + "/ws/" + state.channel);
+
+    socket.onopen = () => {
+      console.log("Succesfully connected to chat server at ws://localhost:8080/ws/" + state.channel);
+    };
+
+    socket.onclose = () => {
+      console.log("Goodbye!");
+    };
+
+    socket.onerror = () => {
+      console.log("Uh oh...");
+    };
+
+    socket.onmessage = event => {
+      const data = JSON.parse(event.data);
+      console.warn(event);
+      console.warn(data);
+    };
+
+    console.warn(socket);
+    return socket;
+  }
+
   useEffect(() => {
-
-    if (state.socketInfo.currentSocket.readyState === WebSocket.OPEN) {
-      state.socketInfo.currentSocket.close();
-
-      dispatch({
-        type: REMOVE_CHANNEL_SOCKET,
-        payload: { socket: null }
-      });
-
-      console.warn("REMOVE SOCKET: ", state.socketInfo.currentSocket);
-    }
-
     dispatch({
       type: SET_CHANNEL_SOCKET,
-      payload: { socket: new WebSocket("ws://" + window.location.host + "/ws/" + state.channel.channel) }
+      payload: { socket: connect() }
     });
 
-    console.warn("SET SOCKET: ", state.socketInfo.currentSocket);
-
-    if (state.socketInfo.currentSocket.readyState === WebSocket.OPEN) {
-      console.warn("HANDLERS SOCKET: ", state.socketInfo.currentSocket);
-
-      state.socketInfo.currentSocket.onopen = () => {
-        console.log("Succesfully connected to chat server at ws://localhost:8080/ws/" + state.channel.channel);
-      };
-
-      state.socketInfo.currentSocket.onclose = () => {
-        console.log("Goodbye!");
-      };
-
-      state.socketInfo.currentSocket.onerror = () => {
-        console.log("Uh oh...");
-      };
-
-      state.socketInfo.currentSocket.onmessage = event => {
-        const data = JSON.parse(event.data);
-        console.warn(event);
-        console.warn(data);
-      };
-    }
-  }, [state.channel]);
+    
+  }, []);
 
   return (
     <React.Fragment>

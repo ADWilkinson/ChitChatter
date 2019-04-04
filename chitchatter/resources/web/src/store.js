@@ -12,7 +12,7 @@ const initialState = {
   users: [],
   messages: [],
   socketInfo: {
-    currentSocket: new WebSocket('ws://' + window.location.host + '/ws/Global')
+    currentSocket: null
   }
 };
 
