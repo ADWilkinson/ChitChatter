@@ -5,7 +5,6 @@ import classNames from "classnames";
 import { Store } from "../store";
 import { SET_CHANNEL } from "../constants/channelActions";
 import { CHANNEL_GLOBAL, CHANNEL_UK } from "../constants/channels";
-import { connect } from "../utils/socket";
 
 const styles = theme => ({
   root: {
@@ -28,6 +27,8 @@ const ChatContainer = props => {
   const [index, setIndex] = useState(0);
 
   const changeChannel = (event, value) => {
+    console.log('EVENT:', event);
+
     setIndex(value);
     const channelSelected = value === 0 ? { name: CHANNEL_GLOBAL, index: 0 } : { name: CHANNEL_UK, index: 1 };
 

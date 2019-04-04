@@ -11,7 +11,10 @@ const initialState = {
   channel: CHANNEL_GLOBAL,
   channelIndex: 0,
   users: [],
-  messages: []
+  messages: {
+    global: [],
+    uk: []
+  }
 };
 
 const mainReducer = (state, action) => {

@@ -1,4 +1,4 @@
-import React, { useState, useContext} from "react";
+import React, { useContext} from "react";
 import { Grid, CardContent, withStyles, TextField, Divider, Button } from "@material-ui/core";
 import SendIcon from "@material-ui/icons/Send";
 import { Store } from "../store";
@@ -18,7 +18,7 @@ const styles = theme => ({
 
 const MessageContainer = props => {
   const { classes } = props;
-  const { state, dispatch } = useContext(Store);
+  const { state } = useContext(Store);
   const { sockets } = useContext(Sockets);
 
   console.warn('MESSAGECONTAINER', sockets)

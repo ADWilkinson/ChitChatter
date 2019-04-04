@@ -1,7 +1,6 @@
 import React from "react";
 import { CHANNEL_LIST } from "../constants/channels";
 
-
 export const Sockets = React.createContext();
 
 export const SocketsProvider = props => {
@@ -19,7 +18,7 @@ const connect = () => {
 
   for (const channel of channels) {
     const socket = new WebSocket("ws://localhost:8080/ws/" + channel);
-    
+
     socket.onclose = () => {
       console.dir("Connection to chat server closed, attempting to reconnect...");
       setTimeout(function() {
