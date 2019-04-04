@@ -30,14 +30,12 @@ class ChatServer {
         }
 
         val messages = synchronized(lastMessages) { lastMessages.toList() }
-        val chatHistory = mutableListOf<ChatApplication.MessageInfo>()
 
         val response = ChatApplication.MessageInfo(
                 sender = "Server",
                 message = "MESSAGE_HISTORY",
                 channel = socketInfo.channel,
-                type = "MESSAGE_HISTORY",
-                messageHistory = chatHistory
+                type = "MESSAGE_HISTORY"
             )
 
         for (messageInfo in messages) {
