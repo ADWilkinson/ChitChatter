@@ -30,16 +30,21 @@ class ChatServer {
         }
 
         val messages = synchronized(lastMessages) { lastMessages.toList() }
+        val users = memberNames.values
 
         val response = ChatApplication.MessageInfo(
                 sender = "Server",
-                message = "MESSAGE_HISTORY",
+                message = "",
                 channel = socketInfo.channel,
-                type = "MESSAGE_HISTORY"
+                type = "UPDATE"
             )
 
         for (messageInfo in messages) {
             response.messageHistory.add(messageInfo)
+        }
+
+        for(user in users){
+            response.participants.add(ChatApplication.Member(user))
         }
 
         broadcast(response)
@@ -47,7 +52,10 @@ class ChatServer {
 
     suspend fun memberRenamed(member: ChatApplication.Member, to: String) {
         val oldName = memberNames.put(member.id, to) ?: member.id
-        val response = ChatApplication.MessageInfo("Server", "Member renamed from $oldName to $to")
+        val response = ChatApplication.MessageInfo(
+            sender = "Server",
+            message = "Member renamed from $oldName to $to"
+        )
         broadcast(response)
     }
 
