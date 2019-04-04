@@ -20,9 +20,12 @@ const MessageContainer = props => {
   const { state, dispatch, sockets } = useContext(Store);
   
   console.warn('MESSAGECONTAINER', sockets)
-  // const sendMessage = () => {
-  //   state.channel.socketInfo.currentSocket.send('HELLO FROM THE APP')
-  // }
+
+  const sendMessage = () => {
+    console.log('CHANNEL', state.channel.channel);
+    const currSocket = sockets.find(x => x.name === state.channel.channel);
+    currSocket.socket.send('HELLO FROM THE APP');
+  }
 
   return (
     <React.Fragment>
@@ -45,7 +48,7 @@ const MessageContainer = props => {
         </Grid>
 
         <Grid item xs={6} container justify="center">
-          <Button variant="text" disabled={false} onClick={()=>{}}>
+          <Button variant="text" disabled={false} onClick={sendMessage}>
             Send
             <SendIcon
               style={{
