@@ -1,36 +1,28 @@
-import React, { useEffect, useContext } from "react";
-import ChatContainer from "../components/ChatContainer";
-import ParticipantsContainer from "../components/ParticipantsContainer";
-import { Store } from "../store";
-import { Sockets } from "../utils/socket";
+import React, { useEffect, useContext } from 'react';
+import ChatContainer from '../components/ChatContainer';
+import ParticipantsContainer from '../components/ParticipantsContainer';
+import { Store } from '../store';
+import { Sockets } from '../utils/socket';
+import MessageProcessor from '../utils/messageProcessor';
 
 const HomePage = () => {
   const { state, dispatch } = useContext(Store);
   const { sockets } = useContext(Sockets);
+  const processor = new MessageProcessor(dispatch);
 
   useEffect(() => {
     for (const socketInfo of sockets) {
       socketInfo.socket.onopen = () => {
-        console.log("Succesfully connected to channel: " + state.channel);
+        console.log('Succesfully connected to channel: ' + socketInfo.name);
       };
 
       socketInfo.socket.onerror = () => {
-        console.log("Uh oh... there was an error connected to the chat server");
+        console.log('Uh oh... there was an error connected to the chat server');
       };
 
-      socketInfo.socket.onmessage = event => {
+      socketInfo.socket.onmessage = async(event) => {
         const data = JSON.parse(event.data);
-      
-        // START ADDING THE FUNCTIONALITY TO STORE EVERYTHING FROM THE SOCKET
-        switch(data.type){
-          case 'MESSAGE':
-            //addMessageToChannel(data, dispatch)
-            break;
-          case 'UPDATE':
-            break;
-          default:
-            break;
-        }
+        await processor.execute(data);
       };
     }
   }, []);

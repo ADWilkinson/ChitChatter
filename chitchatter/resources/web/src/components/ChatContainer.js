@@ -27,7 +27,6 @@ const ChatContainer = props => {
   const [index, setIndex] = useState(0);
 
   const changeChannel = (event, value) => {
-    console.log('EVENT:', event);
 
     setIndex(value);
     const channelSelected = value === 0 ? { name: CHANNEL_GLOBAL, index: 0 } : { name: CHANNEL_UK, index: 1 };

@@ -21,12 +21,8 @@ const MessageContainer = props => {
   const { state } = useContext(Store);
   const { sockets } = useContext(Sockets);
 
-  console.warn('MESSAGECONTAINER', sockets)
-
   const sendMessage = () => {
-    console.log('CHANNEL', state.channel);
     const currSocket = sockets.find(x => x.name === state.channel);
-    console.warn(currSocket);
     currSocket.socket.send('HELLO FROM THE APP');
   }
 

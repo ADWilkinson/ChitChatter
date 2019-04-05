@@ -43,7 +43,6 @@ function connect() {
 
     // If we receive a message from the server, we want to handle it.
     socket.onmessage = function(event) {
-        console.log(event);
         console.log(event.data);
         received(event.data.toString());
     };

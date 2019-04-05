@@ -19,17 +19,6 @@ class ChatServer {
         val name = memberNames.computeIfAbsent(member.id) { "user${usersCounter.incrementAndGet()}" }
         val list = members.computeIfAbsent(member.id) { CopyOnWriteArrayList<ChatApplication.SocketInfo>() }
         list.add(socketInfo)
-
-        if (list.size == 1) {
-            val response = ChatApplication.MessageInfo(
-                sender = "Server",
-                message = "Member joined: $name.",
-                channel = socketInfo.channel,
-                type = "SERVER_MESSAGE"
-            )
-            broadcast(response)
-        }
-
         val messages = synchronized(lastMessages) { lastMessages.toList() }
         val users = memberNames.values
 
@@ -48,15 +37,26 @@ class ChatServer {
         )
 
         for (messageInfo in messages) {
-            usersResponse.messageHistory.add(messageInfo)
+            response.messageHistory.add(messageInfo)
         }
 
         for (user in users) {
-            response.participants.add(ChatApplication.Member(user))
+            usersResponse.participants.add(ChatApplication.Member(user))
         }
 
         broadcast(response)
         broadcast(usersResponse)
+
+        if (list.size == 1) {
+            val res = ChatApplication.MessageInfo(
+                sender = "Server",
+                message = "Member joined: $name.",
+                channel = socketInfo.channel,
+                type = "SERVER_MESSAGE"
+            )
+            broadcast(res)
+        }
+
     }
 
     suspend fun memberRenamed(member: ChatApplication.Member, to: String) {
@@ -150,7 +150,9 @@ class ChatServer {
         for (socketInfo in this) {
             val jsonStr = mapper.writeValueAsString(message)
             try {
-                socketInfo.socket.send(jsonStr)
+                if(socketInfo.channel == message.channel) {
+                    socketInfo.socket.send(jsonStr)
+                }
             } catch (t: Throwable) {
                 try {
                     socketInfo.socket.close(CloseReason(CloseReason.Codes.PROTOCOL_ERROR, ""))

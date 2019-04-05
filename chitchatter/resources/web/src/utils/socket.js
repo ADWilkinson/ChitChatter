@@ -17,6 +17,7 @@ const connect = () => {
   const sockets = [];
 
   for (const channel of channels) {
+    console.log('Connecting to channel: ', channel)
     const socket = new WebSocket("ws://localhost:8080/ws/" + channel);
 
     socket.onclose = () => {
@@ -35,3 +36,5 @@ const connect = () => {
   }
   return sockets;
 };
+
+
