@@ -6,8 +6,8 @@ export const messagesReducer = (state, action) => {
 
   switch (action.type) {
     case SET_MESSAGE_HISTORY:
-      globalMessages = [...state.messages.global, ...action.payload.global];
-      ukMessages = [...state.messages.uk, ...action.payload.uk];
+      globalMessages = [...action.payload.global];
+      ukMessages = [...action.payload.uk];
       const messagesObj = { global: globalMessages, uk: ukMessages };
       return { ...state, messages: messagesObj };
 

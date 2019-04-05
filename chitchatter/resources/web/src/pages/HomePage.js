@@ -29,8 +29,8 @@ const HomePage = () => {
 
   return (
     <React.Fragment>
-      <ParticipantsContainer />
-      <ChatContainer />
+      <ParticipantsContainer participants={state.users}/>
+      <ChatContainer messages={state.messages} />
     </React.Fragment>
   );
 };

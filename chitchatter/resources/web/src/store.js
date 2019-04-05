@@ -13,7 +13,8 @@ const initialState = {
   users: [],
   messages: {
     global: [],
-    uk: []
+    uk: [],
+    server: []
   }
 };
 

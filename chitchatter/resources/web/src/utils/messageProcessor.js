@@ -81,7 +81,7 @@ export default class MessageProcessor {
     const payload = {
       global: globalMessages,
       uk: ukMessages
-	};
+    };
     await this.dispatchAction(SET_MESSAGE_HISTORY, payload);
   };
 

@@ -1,10 +1,10 @@
-import React, { useContext, useState } from "react";
-import MessageContainer from "./MessageContainer";
-import { Grid, Card, Tab, Tabs, AppBar, withStyles } from "@material-ui/core";
-import classNames from "classnames";
-import { Store } from "../store";
-import { SET_CHANNEL } from "../constants/channelActions";
-import { CHANNEL_GLOBAL, CHANNEL_UK } from "../constants/channels";
+import React, { useContext, useState } from 'react';
+import MessageContainer from './MessageContainer';
+import { Grid, Card, Tab, Tabs, AppBar, withStyles } from '@material-ui/core';
+import classNames from 'classnames';
+import { Store } from '../store';
+import { SET_CHANNEL } from '../constants/channelActions';
+import { CHANNEL_GLOBAL, CHANNEL_UK } from '../constants/channels';
 
 const styles = theme => ({
   root: {
@@ -16,8 +16,8 @@ const styles = theme => ({
   },
   toolbar: theme.mixins.toolbar,
   card: {
-    minWidth: 800,
-    maxWidth: 800
+    minWidth: '50%',
+    maxWidth: '50%'
   }
 });
 
@@ -27,7 +27,6 @@ const ChatContainer = props => {
   const [index, setIndex] = useState(0);
 
   const changeChannel = (event, value) => {
-
     setIndex(value);
     const channelSelected = value === 0 ? { name: CHANNEL_GLOBAL, index: 0 } : { name: CHANNEL_UK, index: 1 };
 
