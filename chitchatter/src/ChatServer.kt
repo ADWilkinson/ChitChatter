@@ -26,7 +26,8 @@ class ChatServer {
             sender = "Server",
             message = "",
             channel = socketInfo.channel,
-            type = "SERVER_UPDATE_MESSAGES"
+            type = "SERVER_UPDATE_MESSAGES",
+            recipient = member.id
         )
 
         val usersResponse = ChatApplication.MessageInfo(
@@ -44,7 +45,10 @@ class ChatServer {
             usersResponse.participants.add(ChatApplication.Member(user))
         }
 
+        // TOOD - change to send to only the joined user
         broadcast(response)
+        // TODO -
+
         broadcast(usersResponse)
 
         if (list.size == 1) {
@@ -128,7 +132,7 @@ class ChatServer {
 
     suspend fun message(message: ChatApplication.MessageInfo) {
         val name = memberNames[message.sender] ?: message.sender
-        message.sender = name;
+        message.sender = name
 
         broadcast(message)
 

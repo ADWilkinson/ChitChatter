@@ -42,7 +42,8 @@ export default class MessageProcessor {
       channel: data.channel,
       recipient: data.recipient,
       message: data.message,
-      timestamp: data.messageTime
+      timestamp: data.messageTime,
+      type: data.type
     };
 
     if (data.channel === CHANNEL_GLOBAL) {
@@ -65,7 +66,8 @@ export default class MessageProcessor {
           channel: message.channel,
           recipient: message.recipient,
           message: message.message,
-          timestamp: message.messageTime
+          timestamp: message.messageTime,
+          type: data.type
         });
       } else if (message.channel === CHANNEL_UK) {
         ukMessages.push({
@@ -73,7 +75,8 @@ export default class MessageProcessor {
           channel: message.channel,
           recipient: message.recipient,
           message: message.message,
-          timestamp: message.messageTime
+          timestamp: message.messageTime,
+          type: data.type
         });
       }
     });

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Typography, withStyles } from '@material-ui/core';
+import { Grid, Typography, withStyles, Divider } from '@material-ui/core';
 
 const styles = theme => ({
   myMessage: {
@@ -29,7 +29,7 @@ const MessageBox = props => {
       {props.showAuthor && (
         <Grid item xs={12}>
           <Typography align={props.author ? 'right' : 'left'} variant="caption" style={{ fontWeight: 'bold' }}>
-            {props.authorName}
+            {'props.authorName'}
           </Typography>
         </Grid>
       )}
@@ -42,4 +42,4 @@ const MessageBox = props => {
   );
 };
 
-export default withStyles(styles)(MessageBox)
+export default withStyles(styles)(MessageBox);
