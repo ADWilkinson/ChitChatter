@@ -4,10 +4,7 @@ import com.fasterxml.jackson.core.util.DefaultIndenter
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter
 import com.fasterxml.jackson.databind.SerializationFeature
 import io.ktor.application.*
-import io.ktor.features.CallLogging
-import io.ktor.features.ContentNegotiation
-import io.ktor.features.DefaultHeaders
-import io.ktor.features.StatusPages
+import io.ktor.features.*
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.cio.websocket.WebSocketSession
 import io.ktor.jackson.jackson
@@ -56,6 +53,7 @@ class ChatApplication {
     @KtorExperimentalAPI
     fun Application.main() {
 
+        install(AutoHeadResponse)
         install(DefaultHeaders)
         install(CallLogging)
 
