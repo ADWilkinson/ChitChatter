@@ -33,8 +33,7 @@ fun main() {
         }
 
         connector {
-            port = 8080
-            host = "127.0.0.1"
+            port = Integer.valueOf(System.getenv("PORT"))
         }
     }
     embeddedServer(Netty, env).start(true)
