@@ -94,6 +94,7 @@ class ChatApplication {
     data class SocketInfo(val socket: WebSocketSession, val channel: Channels)
     data class Member(val id: String)
     data class MessageInfo(
+        val userId: String = "",
         var sender: String,
         var message: String = "",
         val channel: Channels = Channels.Global,

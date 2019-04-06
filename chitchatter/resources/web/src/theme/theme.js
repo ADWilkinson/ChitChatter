@@ -6,14 +6,14 @@ import red from '@material-ui/core/colors/red';
 const rawTheme = createMuiTheme({
   palette: {
     primary: {
-      light: '#69696a',
-      main: '#28282a',
-      dark: '#1e1e1f'
+      light: '#ebaca2',
+      main: '#ce6a6b',
+      dark: '#212e53'
     },
     secondary: {
-      light: '#fff5f8',
-      main: '#ff3366',
-      dark: '#e62958'
+      light: '#bed3c3',
+      main: '#4a919e',
+      dark: '#212e53'
     },
     warning: {
       main: '#ffc071',
@@ -53,7 +53,7 @@ const theme = {
     ...rawTheme.palette,
     background: {
       ...rawTheme.palette.background,
-      default: rawTheme.palette.common.white,
+      default: '#ebaca217',
       placeholder: grey[200]
     }
   },

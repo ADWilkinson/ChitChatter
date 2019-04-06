@@ -11,6 +11,7 @@ const initialState = {
   channel: CHANNEL_GLOBAL,
   channelIndex: 0,
   users: [],
+  userId: '',
   messages: {
     global: [],
     uk: [],
@@ -19,7 +20,6 @@ const initialState = {
 };
 
 const mainReducer = (state, action) => {
-  console.warn('RUNNING REDUCERS', state, action);
   /*
     Middleware goes here.
    */

@@ -20,57 +20,60 @@ class ChatServer {
         val list = members.computeIfAbsent(member.id) { CopyOnWriteArrayList<ChatApplication.SocketInfo>() }
         list.add(socketInfo)
         val messages = synchronized(lastMessages) { lastMessages.toList() }
-        val users = memberNames.values
 
         val response = ChatApplication.MessageInfo(
+            userId = member.id,
             sender = "Server",
             message = "",
             channel = socketInfo.channel,
             type = "SERVER_UPDATE_MESSAGES",
             recipient = member.id
         )
-
-        val usersResponse = ChatApplication.MessageInfo(
-            sender = "Server",
-            message = "",
-            channel = socketInfo.channel,
-            type = "SERVER_UPDATE_USERS"
-        )
-
         for (messageInfo in messages) {
             response.messageHistory.add(messageInfo)
         }
 
-        for (user in users) {
-            usersResponse.participants.add(ChatApplication.Member(user))
-        }
-
-        // TOOD - change to send to only the joined user
-        broadcast(response)
-        // TODO -
-
-        broadcast(usersResponse)
+        sendTo(response)
+        sendUserListUpdate()
 
         if (list.size == 1) {
             val res = ChatApplication.MessageInfo(
-                sender = "Server",
+                userId = "SERVER",
+                sender = "SERVER",
                 message = "Member joined: $name.",
                 channel = socketInfo.channel,
                 type = "SERVER_MESSAGE"
             )
             broadcast(res)
         }
+    }
 
+    private suspend fun sendUserListUpdate() {
+        val users = memberNames.values
+        val usersResponse = ChatApplication.MessageInfo(
+            userId = "SERVER",
+            sender = "SERVER",
+            message = "",
+            type = "SERVER_UPDATE_USERS"
+        )
+
+        for (user in users) {
+            usersResponse.participants.add(ChatApplication.Member(user))
+        }
+
+        broadcast(usersResponse)
     }
 
     suspend fun memberRenamed(member: ChatApplication.Member, to: String) {
         val oldName = memberNames.put(member.id, to) ?: member.id
         val response = ChatApplication.MessageInfo(
-            sender = "Server",
+            userId = "SERVER",
+            sender = "SERVER",
             message = "Member renamed from $oldName to $to",
             type = "SERVER_MESSAGE"
         )
         broadcast(response)
+        sendUserListUpdate()
     }
 
     suspend fun memberLeft(member: ChatApplication.Member, socketInfo: ChatApplication.SocketInfo) {
@@ -80,7 +83,8 @@ class ChatServer {
         if (connections != null && connections.isEmpty()) {
             val name = memberNames.remove(member.id) ?: member.id
             val response = ChatApplication.MessageInfo(
-                sender = "Server",
+                userId = "SERVER",
+                sender = "SERVER",
                 message = "Member left: $name.",
                 channel = socketInfo.channel,
                 type = "SERVER_MESSAGE"
@@ -90,7 +94,8 @@ class ChatServer {
             val users = memberNames.values
 
             val updateRes = ChatApplication.MessageInfo(
-                sender = "Server",
+                userId = "SERVER",
+                sender = "SERVER",
                 message = "",
                 channel = socketInfo.channel,
                 type = "SERVER_UPDATE_USERS"
@@ -107,8 +112,9 @@ class ChatServer {
 
     suspend fun who(message: ChatApplication.MessageInfo) {
         val res = message.copy(
-            sender = "Server",
-            message = memberNames.values.joinToString(prefix = "[server::who] "),
+            userId = "SERVER",
+            sender = "SERVER",
+            message = memberNames.values.joinToString(prefix = "Members: "),
             recipient = message.sender,
             type = "SERVER_MESSAGE"
         )
@@ -117,8 +123,9 @@ class ChatServer {
 
     suspend fun help(message: ChatApplication.MessageInfo) {
         val res = message.copy(
-            sender = "Server",
-            message = "[server::help] Possible commands are: /user, /help and /who",
+            userId = "SERVER",
+            sender = "SERVER",
+            message = "Possible commands are: /user, /help and /who",
             recipient = message.sender,
             type = "SERVER_MESSAGE"
         )
@@ -133,7 +140,6 @@ class ChatServer {
     suspend fun message(message: ChatApplication.MessageInfo) {
         val name = memberNames[message.sender] ?: message.sender
         message.sender = name
-
         broadcast(message)
 
         synchronized(lastMessages) {
@@ -154,7 +160,7 @@ class ChatServer {
         for (socketInfo in this) {
             val jsonStr = mapper.writeValueAsString(message)
             try {
-                if(socketInfo.channel == message.channel) {
+                if (socketInfo.channel == message.channel) {
                     socketInfo.socket.send(jsonStr)
                 }
             } catch (t: Throwable) {

@@ -1,7 +1,7 @@
 import { CHANNEL_UK, CHANNEL_GLOBAL } from '../constants/channels';
 import { USER_MESSAGE, SERVER_MESSAGE, SERVER_UPDATE_MESSAGES, SERVER_UPDATE_USERS } from '../constants/messageTypes';
 import { ADD_GLOBAL_MESSAGE, ADD_UK_MESSAGE, SET_MESSAGE_HISTORY } from '../constants/messagesActions';
-import { SET_USERS_LIST } from '../constants/usersActions';
+import { SET_USERS_LIST, SET_USER_ID } from '../constants/usersActions';
 
 export default class MessageProcessor {
   constructor(dispatch) {
@@ -38,6 +38,7 @@ export default class MessageProcessor {
 
   addMessageToStore = async data => {
     const messageObj = {
+      userId: data.userId,
       sender: data.sender,
       channel: data.channel,
       recipient: data.recipient,
@@ -58,10 +59,12 @@ export default class MessageProcessor {
   setMessageHistoryToStore = async data => {
     const globalMessages = [];
     const ukMessages = [];
+    const userId = data.recipient;
 
     data.messageHistory.forEach(message => {
       if (message.channel === CHANNEL_GLOBAL) {
         globalMessages.push({
+          userId: message.userId,
           sender: message.sender,
           channel: message.channel,
           recipient: message.recipient,
@@ -71,6 +74,7 @@ export default class MessageProcessor {
         });
       } else if (message.channel === CHANNEL_UK) {
         ukMessages.push({
+          userId: message.userId,
           sender: message.sender,
           channel: message.channel,
           recipient: message.recipient,
@@ -85,7 +89,9 @@ export default class MessageProcessor {
       global: globalMessages,
       uk: ukMessages
     };
+
     await this.dispatchAction(SET_MESSAGE_HISTORY, payload);
+    await this.dispatchAction(SET_USER_ID, userId);
   };
 
   setUserListToStore = async data => {

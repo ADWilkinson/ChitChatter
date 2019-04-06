@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Grid, CardContent, withStyles, TextField, Divider, Button, Typography } from '@material-ui/core';
 import SendIcon from '@material-ui/icons/Send';
 
 const styles = theme => ({
   messages: {
+    overflowY: 'auto',
     minHeight: 700,
     maxHeight: 700,
     overflow: 'auto'
   },
   log: {
+    overflowY: 'auto',
     minHeight: 150,
     maxHeight: 150,
     overflow: 'auto'
@@ -18,11 +20,13 @@ const styles = theme => ({
     maxWidth: 600
   },
   subtitle: {
+    fontWeight: 'bold',
+    color: '#212e53de',
     minHeight: '16px',
     minWidth: '16px',
-    borderRadius: 6,
-    padding: 6,
-    margin: 2
+    borderRadius: 8,
+    padding: '6px 6px 0px 6px',
+    margin: 0
   }
 });
 
@@ -66,13 +70,13 @@ const MessageContainer = props => {
         <Grid container alignContent={'flex-end'}>
           {props.messageList(true)}
         </Grid>
-        <div style={{ paddingTop: '50px' }} ref={endOfChat} />
+        <div style={{ paddingTop: '80px' }} ref={endOfChat} />
       </CardContent>
       <Divider />
 
       <Grid container wrap="nowrap" justify="center" style={{ margin: 12 }}>
-        <Grid item xs={10} container justifty="center">
-          <TextField
+        <Grid item xs={10} container   style={{color: '#212e53'}} justifty="center">
+          <TextField        
             label="Type a message..."
             autoFocus
             className={classes.card}
@@ -85,12 +89,12 @@ const MessageContainer = props => {
           />
         </Grid>
         <Grid item xs={2} container justify="center">
-          <Button variant="text" disabled={userInput === ''} onClick={handleSendButton}>
+          <Button style={{color: userInput === '' ? 'rgba(0,0,0,.2)' : '#212e53'}} variant="text" disabled={userInput === ''} onClick={handleSendButton}>
             Send
             <SendIcon
               style={{
                 paddingLeft: '6px',
-                color: false ? 'rgba(0,0,0,.2)' : '#0084ff'
+                color: userInput === '' ? 'rgba(0,0,0,.2)' : '#212e53'
               }}
             />
           </Button>
@@ -100,6 +104,10 @@ const MessageContainer = props => {
       <CardContent className={classes.log}>
         <Typography variant="body2" className={classes.subtitle}>
           {'Server Messages'}
+        </Typography>
+        <Typography style={{ color: '#ebaca2', padding: 6,
+    margin: 2 }} variant="caption">
+            Type '/help' for information
         </Typography>
         <Divider />
         <Grid container>{props.messageList(false)}</Grid>

@@ -19,6 +19,8 @@ const styles = theme => ({
   },
   toolbar: theme.mixins.toolbar,
   card: {
+    borderRadius: '20px',
+    border: 'solid thin #00000036',
     minWidth: '50%',
     maxWidth: '50%'
   }
@@ -33,9 +35,12 @@ const ChatContainer = props => {
   useEffect(() => {
     setTimeout(() => {
       forceScrollToBottom();
-    }, 1000);
+    }, 400);
   }, []);
   const changeChannel = (event, value) => {
+    setTimeout(() => {
+      forceScrollToBottom();
+    }, 100);
     setIndex(value);
     const channelSelected = value === 0 ? { name: CHANNEL_GLOBAL, index: 0 } : { name: CHANNEL_UK, index: 1 };
 
@@ -70,9 +75,14 @@ const ChatContainer = props => {
 
     return (
       <React.Fragment>
-        {messageArray.map(msg => {
+        {messageArray.map((msg, index) => {
           return (
-            <MessageBox key={msg.sender + msg.timestamp + msg.message} author={true} authorName={msg.sender} messageContent={msg.message} />
+            <MessageBox
+              key={index}
+              author={msg.userId === state.userId}
+              authorName={msg.sender}
+              messageContent={msg.message}
+            />
           );
         })}
       </React.Fragment>

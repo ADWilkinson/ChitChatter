@@ -6,6 +6,7 @@ import theme from './theme/theme';
 import Navbar from './components/Navbar';
 import { StoreProvider } from './store';
 import { SocketsProvider} from "./utils/socket";
+import './index.css';
 
 const App = () => {
   return (

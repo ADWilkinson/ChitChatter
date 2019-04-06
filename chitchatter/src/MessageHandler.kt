@@ -7,7 +7,8 @@ suspend fun messageHandler(
     channel: Channels
 ) {
 
-    val messageInfo = ChatApplication.MessageInfo(member.id, command, channel)
+    val messageInfo =
+        ChatApplication.MessageInfo(userId = member.id, sender = member.id, message = command, channel = channel)
 
     when {
         command.startsWith("/who") -> server.who(messageInfo)
@@ -16,16 +17,18 @@ suspend fun messageHandler(
             when {
                 newName.isEmpty() -> server.sendTo(
                     messageInfo.copy(
-                        sender = "Server",
-                        message = "[server::help] /user [newName]",
+                        userId = "SERVER",
+                        sender = "SERVER",
+                        message = "/user [newName]",
                         recipient = messageInfo.sender,
                         type = "SERVER_MESSAGE"
                     )
                 )
                 newName.length > 50 -> server.sendTo(
                     messageInfo.copy(
-                        sender = "Server",
-                        message = "[server::help] new name is too long: 50 characters limit",
+                        userId = "SERVER",
+                        sender = "SERVER",
+                        message = "New name is too long, there is a 50 characters limit",
                         recipient = messageInfo.sender,
                         type = "SERVER_MESSAGE"
                     )
@@ -36,8 +39,9 @@ suspend fun messageHandler(
         command.startsWith("/help") -> server.help(messageInfo)
         command.startsWith("/") -> server.sendTo(
             messageInfo.copy(
-                sender = "Server",
-                message = "[server::help] Unknown command ${command.takeWhile { !it.isWhitespace() }}",
+                userId = "SERVER",
+                sender = "SERVER",
+                message = "Unknown command ${command.takeWhile { !it.isWhitespace() }}",
                 recipient = messageInfo.sender,
                 type = "SERVER_MESSAGE"
             )
