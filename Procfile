@@ -1,1 +1,1 @@
-web:    java -jar build/libs/chitchatter-1.0.0-all.jar
+web:    -Dserver.port=$PORT java -jar build/libs/chitchatter-1.0.0-all.jar

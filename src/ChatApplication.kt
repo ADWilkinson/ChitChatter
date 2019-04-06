@@ -33,7 +33,7 @@ fun main() {
         }
 
         connector {
-            port = 8080
+            port = System.getenv("PORT").toInt()
             host = "0.0.0.0"
         }
     }
