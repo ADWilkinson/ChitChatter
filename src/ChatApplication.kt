@@ -32,14 +32,8 @@ fun main() {
             ChatApplication().apply { main() }
         }
 
-        // Private API
-        connector {
-            host = "127.0.0.1"
-            port = 9090
-        }
         // Public API
         connector {
-            host = "0.0.0.0"
             port = System.getenv("PORT")?.toInt() ?: 8080
         }
 
