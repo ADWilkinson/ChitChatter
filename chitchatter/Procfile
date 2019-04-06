@@ -1,1 +1,1 @@
-web:    java -jar build/libs/chitchatter-1.0.0-all.jar
+web:    java -jar target/chitchatter-1.0.0-all.jarheroku git:remote -a chitchatter-uk
