@@ -19,7 +19,7 @@ import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.channels.consumeEach
 
 fun Routing.root() {
-    static {
+    static("/") {
         defaultResource("index.html", "web/build")
         resources("web/build")
     }
