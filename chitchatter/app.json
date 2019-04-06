@@ -1,0 +1,5 @@
+{
+  "name": "chitchatter-uk",
+  "description": "Anonymous chat application",
+  "image": "heroku/java"
+}
