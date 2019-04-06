@@ -32,10 +32,17 @@ fun main() {
             ChatApplication().apply { main() }
         }
 
+        // Private API
         connector {
-            port = System.getenv("PORT").toInt()
-            host = "0.0.0.0"
+            host = "127.0.0.1"
+            port = 9090
         }
+        // Public API
+        connector {
+            host = "0.0.0.0"
+            port = System.getenv("PORT")?.toInt() ?: 8080
+        }
+
     }
     embeddedServer(Netty, env).start(true)
 }
