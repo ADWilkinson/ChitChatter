@@ -1,5 +1,5 @@
-import React from "react";
-import { CHANNEL_LIST } from "../constants/channels";
+import React from 'react';
+import { CHANNEL_LIST } from '../constants/channels';
 
 export const Sockets = React.createContext();
 
@@ -17,13 +17,13 @@ const connect = () => {
   const sockets = [];
 
   for (const channel of channels) {
-    console.log('Connecting to channel: ', channel)
-    const socket = new WebSocket("wss://" + window.location.host + "/ws/" + channel);
+    console.log('Connecting to channel: ', channel);
+    const socket = new WebSocket('wss://' + window.location.host + '/ws/' + channel);
 
     socket.onclose = () => {
-      console.dir("Connection to chat server closed, attempting to reconnect...");
+      console.dir('Connection to chat server closed, attempting to reconnect...');
       setTimeout(function() {
-//        connect();
+        connect();
       }, 1000);
     };
 
@@ -36,5 +36,3 @@ const connect = () => {
   }
   return sockets;
 };
-
-
