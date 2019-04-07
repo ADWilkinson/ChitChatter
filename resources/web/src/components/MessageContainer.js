@@ -7,13 +7,23 @@ const styles = theme => ({
     overflowY: 'auto',
     minHeight: '25em',
     maxHeight: '25em',
-    overflow: 'auto'
+    overflow: 'auto',
+    [theme.breakpoints.down('sm')]: {
+      minHeight: window.screen.availHeight * 0.5,
+      maxHeight: window.screen.availHeight * 0.5 
+    }
   },
   log: {
     overflowY: 'auto',
     minHeight: 150,
     maxHeight: 150,
     overflow: 'auto'
+  },
+  noButton: {
+    [theme.breakpoints.down('sm')]: {
+      visibility: 'hidden'
+
+    }
   },
   card: {
     minWidth: '25em',
@@ -75,8 +85,8 @@ const MessageContainer = props => {
       <Divider />
 
       <Grid container wrap="nowrap" justify="center" style={{ margin: 12 }}>
-        <Grid item xs={10} container   style={{color: '#212e53'}} justifty="center">
-          <TextField        
+        <Grid item xs={10} container style={{ color: '#212e53' }} justifty="center">
+          <TextField
             label="Type a message..."
             autoFocus
             className={classes.card}
@@ -89,13 +99,14 @@ const MessageContainer = props => {
           />
         </Grid>
         <Grid item xs={2} container justify="center">
-          <Button style={{color: userInput === '' ? 'rgba(0,0,0,.2)' : '#212e53'}} variant="text" disabled={userInput === ''} onClick={handleSendButton}>
+          <Button style={{ color: userInput === '' ? 'rgba(0,0,0,.2)' : '#212e53' }} variant="text" disabled={userInput === ''} onClick={handleSendButton}>
             Send
             <SendIcon
               style={{
                 paddingLeft: '6px',
                 color: userInput === '' ? 'rgba(0,0,0,.2)' : '#212e53'
               }}
+              className={classes.noButton}
             />
           </Button>
         </Grid>
@@ -105,9 +116,8 @@ const MessageContainer = props => {
         <Typography variant="body2" className={classes.subtitle}>
           {'Server Messages'}
         </Typography>
-        <Typography style={{ color: '#ebaca2', padding: 6,
-    margin: 2 }} variant="caption">
-            Type '/help' for information
+        <Typography style={{ color: '#ebaca2', padding: 6, margin: 2 }} variant="caption">
+          Type '/help' for information
         </Typography>
         <Divider />
         <Grid container>{props.messageList(false)}</Grid>
