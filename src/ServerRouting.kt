@@ -20,14 +20,8 @@ import java.io.File
 
 fun Route.root() {
     static {
-        //defaultResource("index.html", "web/build")
-        //        resources("web/build")
         files("static")
         default("static/index.html")
-
-//        staticRootFolder = File("./resources/web/build")
-//        files(".")
-//        default("index.html")
     }
 }
 

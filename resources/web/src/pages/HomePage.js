@@ -20,7 +20,7 @@ const HomePage = () => {
         console.log('Uh oh... there was an error connected to the chat server');
       };
 
-      socketInfo.socket.onmessage = async(event) => {
+      socketInfo.socket.onmessage = async event => {
         const data = JSON.parse(event.data);
         await processor.execute(data);
       };
@@ -29,7 +29,7 @@ const HomePage = () => {
 
   return (
     <React.Fragment>
-      <ParticipantsContainer participants={state.users}/>
+      <ParticipantsContainer participants={state.users} />
       <ChatContainer messages={state.messages} />
     </React.Fragment>
   );

@@ -5,8 +5,9 @@ import { MuiThemeProvider } from '@material-ui/core/styles';
 import theme from './theme/theme';
 import Navbar from './components/Navbar';
 import { StoreProvider } from './store';
-import { SocketsProvider} from "./utils/socket";
+import { SocketsProvider } from './utils/socket';
 import './index.css';
+import Card from '@material-ui/core/Card';
 
 const App = () => {
   return (
@@ -17,14 +18,15 @@ const App = () => {
         <header>
           <Navbar />
         </header>
-        
+
         <SocketsProvider>
           <main>
             <Routes />
           </main>
         </SocketsProvider>
-        
+
         <footer />
+        
       </StoreProvider>
     </MuiThemeProvider>
   );

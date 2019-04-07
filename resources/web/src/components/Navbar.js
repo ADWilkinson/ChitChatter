@@ -39,35 +39,15 @@ const styles = theme => ({
 const Navbar = props => {
   const { classes } = props;
 
-  /*
-
-  Context API Hooks Example:
-
-  const { state, dispatch } = useContext(Store);
-
-  useEffect(() => {
-    dispatch({
-      type: SET_LOCATION,
-      payload: 'HOMEPAGE'
-    });
-  }, []);
-  */
-
   return (
     <MuiAppBar position="static" className={classes.topLayer}>
       <MuiToolbar className={classNames(classes.toolbar, classes.topLayer)}>
         <div className={classes.left} />
         <Link variant="h6" underline="none" color="inherit" className={classes.title} href="/">
           ChitChatter
+          <img style={{ height: '1.5em', paddingLeft: '0.5em' }} src={require('../assets/conversation.png')} />
         </Link>
-        <div className={classes.right}>
-          {/* <Link color="inherit" variant="h6" underline="none" className={classes.rightLink} href="/login">
-            {'Sign In'}
-          </Link>
-          <Link variant="h6" underline="none" className={classNames(classes.rightLink, classes.linkSecondary)} href="/signup">
-            {'Sign Up'}
-          </Link> */}
-        </div>
+        <div className={classes.right} />
       </MuiToolbar>
     </MuiAppBar>
   );

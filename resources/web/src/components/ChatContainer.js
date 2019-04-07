@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import MessageContainer from './MessageContainer';
-import { Grid, Card, Tab, Tabs, AppBar, withStyles } from '@material-ui/core';
+import { Grid, Card, Tab, Tabs, AppBar, withStyles, Button, Fab } from '@material-ui/core';
 import classNames from 'classnames';
 import { Store } from '../store';
 import { SET_CHANNEL } from '../constants/channelActions';
@@ -19,10 +19,17 @@ const styles = theme => ({
   },
   toolbar: theme.mixins.toolbar,
   card: {
+    marginTop: '40px',
     borderRadius: '20px',
     border: 'solid thin #00000036',
     minWidth: '50%',
     maxWidth: '50%'
+  },
+  footerCard: {
+    borderRadius: '25px'
+  },
+  rightIcon: {
+    marginRight: theme.spacing.unit
   }
 });
 
@@ -76,14 +83,7 @@ const ChatContainer = props => {
     return (
       <React.Fragment>
         {messageArray.map((msg, index) => {
-          return (
-            <MessageBox
-              key={index}
-              author={msg.userId === state.userId}
-              authorName={msg.sender}
-              messageContent={msg.message}
-            />
-          );
+          return <MessageBox key={index} author={msg.userId === state.userId} authorName={msg.sender} messageContent={msg.message} />;
         })}
       </React.Fragment>
     );
@@ -110,6 +110,22 @@ const ChatContainer = props => {
           </Card>
         </Grid>
       </div>
+      <Grid container justify="center">
+        <Fab
+          variant="extended"
+          style={{ backgroundColor: '#ce6a6b12' }}
+          aria-label="Github"
+          target="_blank"
+          href={'https://github.com/ADWilkinson'}
+        >
+          <div className={classes.rightIcon}>
+            <i className={'fab fa-github'} />
+          </div>
+          <span>{'Created with'} </span>
+          <i style={{ padding: '0px 7px 0px 7px', color: '#ce6a6b' }} className={'fas fa-heart'} />
+          <span>{'by Andrew Wilkinson'} </span>
+        </Fab>
+      </Grid>
     </React.Fragment>
   );
 };

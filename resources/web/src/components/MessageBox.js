@@ -29,7 +29,7 @@ const MessageBox = props => {
     <Grid container item xs={12} justify={props.author ? 'flex-end' : 'flex-start'} style={{ padding: 3 }}>
       {props.authorName !== 'SERVER' && (
         <Grid item xs={12}>
-          <Typography align={props.author ? 'right' : 'left'} variant="caption" style={{color: '#696969', fontWeight: 'bold' }}>
+          <Typography align={props.author ? 'right' : 'left'} variant="caption" style={{ color: '#696969', fontWeight: 'bold' }}>
             {props.authorName}
           </Typography>
         </Grid>
