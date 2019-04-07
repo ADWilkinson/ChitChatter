@@ -5,8 +5,8 @@ import SendIcon from '@material-ui/icons/Send';
 const styles = theme => ({
   messages: {
     overflowY: 'auto',
-    minHeight: 400,
-    maxHeight: 700,
+    minHeight: '25em',
+    maxHeight: '25em',
     overflow: 'auto'
   },
   log: {
@@ -16,8 +16,8 @@ const styles = theme => ({
     overflow: 'auto'
   },
   card: {
-    minWidth: 600,
-    maxWidth: 600
+    minWidth: '25em',
+    maxWidth: '25em'
   },
   subtitle: {
     fontWeight: 'bold',
