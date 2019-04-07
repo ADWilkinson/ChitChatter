@@ -1,13 +1,28 @@
-import React from 'react';
-import { withStyles, Drawer, Grid, Typography, Divider } from '@material-ui/core';
+import React, { useState } from 'react';
+import { withStyles, Drawer, Grid, Typography, Divider, Hidden, Icon, IconButton, MenuItem, Fab } from '@material-ui/core';
+import PeopleIcon from '@material-ui/icons/People';
+import Arrow from '@material-ui/icons/ArrowBack';
+import classNames from 'classnames';
 
 const styles = theme => ({
   drawer: {
-    width: 240,
-    flexShrink: 0,
-    overflowY: 'auto'
+    [theme.breakpoints.up('sm')]: {
+      width: 240,
+      flexShrink: 0,
+      overflowY: 'auto'
+    }
+  },
+  fab: {
+    margin: theme.spacing.unit
+  },
+  menuButton: {
+    marginRight: 20,
+    [theme.breakpoints.up('sm')]: {
+      display: 'none'
+    }
   },
   drawerPaper: {
+    paddingTop: '4em',
     width: 240,
     top: 'inherit'
   },
@@ -21,6 +36,11 @@ const styles = theme => ({
 
 const ParticipantsContainer = props => {
   const { classes } = props;
+  const [mobile, setMobile] = useState({ mobileOpen: false });
+
+  const handleDrawerToggle = () => {
+    setMobile(mobile => ({ mobileOpen: !mobile.mobileOpen }));
+  };
 
   const renderParticpants = users => {
     return (
@@ -54,10 +74,48 @@ const ParticipantsContainer = props => {
 
   return (
     <React.Fragment>
-      <Drawer variant="permanent" className={classes.drawer} classes={{ paper: classes.drawerPaper }}>
+      <div>
+        <Fab color="secondary" aria-label="People" style={{
+          position: 'absolute',
+          transform: 'translateY(-50px)',
+          zIndex: '1250'}} onClick={handleDrawerToggle} className={classNames(classes.fab, classes.menuButton)}>
+          <PeopleIcon />
+        </Fab>
+      </div>
+      <Hidden smUp implementation="css">
+        <Drawer
+          variant="temporary"
+          open={mobile.mobileOpen}
+          onClose={handleDrawerToggle}
+          classes={{
+            paper: classes.drawerPaper
+          }}
+        >
+          <div style={{
+            marginLeft: 'auto', marginRight: 'auto', marginBottom: '1em'}}>
+            <Fab color="primary" aria-label="Back" align="center"  onClick={handleDrawerToggle} className={classNames(classes.fab, classes.menuButton)}>
+              <Arrow />
+            </Fab>
+          </div>
+          {renderParticpants(props.participants)}
+        </Drawer>
+      </Hidden>
+      <Hidden xsDown implementation="css">
+        <Drawer
+          classes={{
+            paper: classes.drawerPaper
+          }}
+          variant="permanent"
+          open
+        >
+          {renderParticpants(props.participants)}
+        </Drawer>
+      </Hidden>
+
+      {/* <Drawer variant="permanent" className={classes.drawer} classes={{ paper: classes.drawerPaper }}>
         <div className={classes.toolbar} />
         {renderParticpants(props.participants)}
-      </Drawer>
+      </Drawer> */}
     </React.Fragment>
   );
 };

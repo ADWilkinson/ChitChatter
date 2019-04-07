@@ -23,7 +23,18 @@ const styles = theme => ({
     borderRadius: '20px',
     border: 'solid thin #00000036',
     minWidth: '50%',
-    maxWidth: '50%'
+    maxWidth: '100%'
+  },
+  noTop: {
+    [theme.breakpoints.down('sm')]: {
+      marginTop: '0px',
+      paddingTop: '0px'
+    }
+  },
+  noButton: {
+      [theme.breakpoints.down('sm')]: {
+        display: 'none'
+      }
   },
   footerCard: {
     borderRadius: '25px'
@@ -93,7 +104,7 @@ const ChatContainer = props => {
     <React.Fragment>
       <div className={classNames(classes.root, classes.content, classes.toolbar)}>
         <Grid container justify="center">
-          <Card className={classes.card}>
+          <Card className={classNames(classes.card, classes.noTop)}>
             <AppBar position="static" color="default">
               <Tabs value={index} onChange={changeChannel} indicatorColor="primary" textColor="primary" variant="fullWidth">
                 <Tab label="Global" />
@@ -110,14 +121,8 @@ const ChatContainer = props => {
           </Card>
         </Grid>
       </div>
-      <Grid container justify="center">
-        <Fab
-          variant="extended"
-          style={{ backgroundColor: '#ce6a6b12' }}
-          aria-label="Github"
-          target="_blank"
-          href={'https://github.com/ADWilkinson'}
-        >
+      <Grid className={classes.noButton} container justify="center">
+        <Fab variant="extended" style={{ backgroundColor: '#ce6a6b12' }} aria-label="Github" target="_blank" href={'https://github.com/ADWilkinson'}>
           <div className={classes.rightIcon}>
             <i className={'fab fa-github'} />
           </div>

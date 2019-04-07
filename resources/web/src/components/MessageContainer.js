@@ -5,7 +5,7 @@ import SendIcon from '@material-ui/icons/Send';
 const styles = theme => ({
   messages: {
     overflowY: 'auto',
-    minHeight: 700,
+    minHeight: 400,
     maxHeight: 700,
     overflow: 'auto'
   },

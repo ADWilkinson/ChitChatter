@@ -23,7 +23,7 @@ const connect = () => {
     socket.onclose = () => {
       console.dir("Connection to chat server closed, attempting to reconnect...");
       setTimeout(function() {
-        connect();
+//        connect();
       }, 1000);
     };
 
