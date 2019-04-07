@@ -6,10 +6,9 @@ import io.ktor.http.cio.websocket.CloseReason
 import io.ktor.http.cio.websocket.Frame
 import io.ktor.http.cio.websocket.close
 import io.ktor.http.cio.websocket.readText
-import io.ktor.http.content.defaultResource
-import io.ktor.http.content.resources
-import io.ktor.http.content.static
+import io.ktor.http.content.*
 import io.ktor.response.respond
+import io.ktor.routing.Route
 import io.ktor.routing.Routing
 import io.ktor.routing.get
 import io.ktor.sessions.get
@@ -17,22 +16,27 @@ import io.ktor.sessions.sessions
 import io.ktor.websocket.webSocket
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.channels.consumeEach
+import java.io.File
 
-fun Routing.root() {
-    static("/") {
-        defaultResource("index.html", "web/build")
-        resources("web/build")
+fun Route.root() {
+    static {
+        files("static")
+        default("static/index.html")
+
+//        staticRootFolder = File("./resources/web/build")
+//        files(".")
+//        default("index.html")
     }
 }
 
-fun Routing.status() {
+fun Route.status() {
     get("/status") {
         call.respond(HttpStatusCode(200, "OK"), "OK")
     }
 }
 
 @ObsoleteCoroutinesApi
-fun Routing.chatSocket(server: ChatServer) {
+fun Route.chatSocket(server: ChatServer) {
     webSocket("/ws/{location}") {
         // this: WebSocketSession ->
         val channel = Channels.valueOf(call.parameters["location"] ?: "Global")

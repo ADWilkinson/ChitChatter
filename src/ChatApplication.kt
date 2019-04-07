@@ -16,6 +16,7 @@ import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import io.ktor.sessions.*
 import io.ktor.util.KtorExperimentalAPI
+import io.ktor.util.error
 import io.ktor.util.generateNonce
 import io.ktor.websocket.WebSockets
 import kotlinx.coroutines.ObsoleteCoroutinesApi
@@ -86,6 +87,12 @@ class ChatApplication {
                 call.sessions.set(ChatSession(generateNonce()))
             }
         }
+
+        // Enables Cross-Origin Resource Sharing (CORS)
+        install(CORS) {
+            anyHost()
+        }
+
         routing {
             root()
             status()
