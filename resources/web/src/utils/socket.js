@@ -18,7 +18,7 @@ const connect = () => {
 
   for (const channel of channels) {
     console.log('Connecting to channel: ', channel)
-    const socket = new WebSocket("ws://" + window.location.host + "/ws/" + channel);
+    const socket = new WebSocket("wss://" + window.location.host + "/ws/" + channel);
 
     socket.onclose = () => {
       console.dir("Connection to chat server closed, attempting to reconnect...");
