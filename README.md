@@ -1,4 +1,14 @@
 # ChitChatter
-Local Anonymous Chat Client
+Anonymous Chat Application built with Kotlin, Ktor & React
 
-Write up coming regarding this fun pet project
+### API Websocket Server
+  - Kotlin
+  - Ktor
+  - Gradle
+  - Heroku
+  
+### Client Web Application
+  - React
+  - React Context
+  - Material Design
+  - Websockets
