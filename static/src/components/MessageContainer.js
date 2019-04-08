@@ -7,8 +7,8 @@ const styles = theme => ({
     overflowY: 'auto',
     minHeight: '25em',
     maxHeight: '25em',
-    minWidth: '700px',
-    maxWidth: '700px',
+    minWidth: '720px',
+    maxWidth: '720px',
     overflow: 'auto',
     [theme.breakpoints.down('sm')]: {
       minHeight: window.screen.availHeight * 0.5,
@@ -31,7 +31,11 @@ const styles = theme => ({
   },
   card: {
     minWidth: '25em',
-    maxWidth: '25em'
+    maxWidth: '25em',
+    [theme.breakpoints.down('sm')]: {
+      minWidth: 'inherit',
+      maxWidth: 'inherit'
+    }
   },
   subtitle: {
     fontWeight: 'bold',
