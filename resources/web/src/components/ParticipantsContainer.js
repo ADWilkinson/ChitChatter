@@ -111,11 +111,6 @@ const ParticipantsContainer = props => {
           {renderParticpants(props.participants)}
         </Drawer>
       </Hidden>
-
-      {/* <Drawer variant="permanent" className={classes.drawer} classes={{ paper: classes.drawerPaper }}>
-        <div className={classes.toolbar} />
-        {renderParticpants(props.participants)}
-      </Drawer> */}
     </React.Fragment>
   );
 };
