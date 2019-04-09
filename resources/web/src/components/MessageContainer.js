@@ -7,8 +7,8 @@ const styles = theme => ({
     overflowY: 'auto',
     minHeight: '25em',
     maxHeight: '25em',
-    minWidth: '720px',
-    maxWidth: '720px',
+    minWidth: '100%',
+    maxWidth: '100%',
     overflow: 'auto',
     [theme.breakpoints.down('sm')]: {
       minHeight: window.screen.availHeight * 0.5,
